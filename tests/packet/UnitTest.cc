@@ -564,6 +564,55 @@ static void testBackPopOffset()
     ASSERT_ERROR(packet1.peekAtBack(B(1)), "length is invalid");
 }
 
+static void testUpdate()
+{
+    // 1. update destructively
+    Packet packet1;
+    packet1.insertAtFront(makeImmutableApplicationHeader(42));
+    packet1.insertAtBack(makeImmutableTcpHeader());
+    // 2. update at front
+    ASSERT(packet1.peekAtFront<ApplicationHeader>()->getSomeData() == 42);
+    packet1.updateAtFront<ApplicationHeader>([] (const Ptr<ApplicationHeader>& applicationHeader) {
+        applicationHeader->setSomeData(0);
+    });
+    ASSERT(packet1.peekAtFront<ApplicationHeader>()->getSomeData() == 0);
+    // 3. update at back
+    ASSERT(packet1.peekAtBack<TcpHeader>(B(20))->getCrc() == 0);
+    packet1.updateAtBack<TcpHeader>([] (const Ptr<TcpHeader>& tcpHeader) {
+        tcpHeader->setCrc(42);
+    }, B(20));
+    ASSERT(packet1.peekAtBack<TcpHeader>(B(20))->getCrc() == 42);
+    // 4. udpate copy of the original
+    auto& packet2 = *packet1.dup();
+    // 5. update at front
+    ASSERT(packet2.peekAtFront<ApplicationHeader>()->getSomeData() == 0);
+    packet2.updateAtFront<ApplicationHeader>([] (const Ptr<ApplicationHeader>& applicationHeader) {
+        applicationHeader->setSomeData(42);
+    });
+    ASSERT(packet1.peekAtFront<ApplicationHeader>()->getSomeData() == 0);
+    ASSERT(packet2.peekAtFront<ApplicationHeader>()->getSomeData() == 42);
+    // 3. update at back
+    ASSERT(packet2.peekAtBack<TcpHeader>(B(20))->getCrc() == 42);
+    packet2.updateAtBack<TcpHeader>([] (const Ptr<TcpHeader>& tcpHeader) {
+        tcpHeader->setCrc(0);
+    }, B(20));
+    ASSERT(packet1.peekAtBack<TcpHeader>(B(20))->getCrc() == 42);
+    ASSERT(packet2.peekAtBack<TcpHeader>(B(20))->getCrc() == 0);
+
+    // TODO: check updating in the middle
+    Packet packet3;
+    packet3.insertAtFront(makeImmutableApplicationHeader(42));
+    packet3.insertAtFront(makeImmutableTcpHeader());
+    packet3.insertAtFront(makeImmutableIpHeader());
+    ASSERT(packet3.peekAt<TcpHeader>(B(10))->getCrc() == 0);
+    packet3.updateAt<TcpHeader>([] (const Ptr<TcpHeader>& tcpHeader) {
+        tcpHeader->setCrc(42);
+    }, B(10));
+    ASSERT(packet3.peekAt<TcpHeader>(B(10))->getCrc() == 42);
+
+    // TODO: check updating a BytesChunk through a FieldsChunk
+}
+
 static void testEncapsulation()
 {
     // 1. packet contains all chunks of encapsulated packet as is
@@ -1916,6 +1965,7 @@ void UnitTest::initialize()
     testTrailer();
     testFrontPopOffset();
     testBackPopOffset();
+    testUpdate();
     testEncapsulation();
     testAggregation();
     testFragmentation();

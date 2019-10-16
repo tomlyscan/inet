@@ -16,6 +16,7 @@
 #ifndef __INET_PACKET_H_
 #define __INET_PACKET_H_
 
+#include <functional>
 #include "inet/common/packet/chunk/BitsChunk.h"
 #include "inet/common/packet/chunk/BytesChunk.h"
 #include "inet/common/packet/tag/TagSet.h"
@@ -561,6 +562,72 @@ class INET_API Packet : public cPacket
      * current representation. Resets both front and back offsets to zero.
      */
     const Ptr<Chunk> removeAll();
+    //@}
+
+    /** @name Updating data related functions */
+    //@{
+    /**
+     * Updates the designated part by applying the provided function on the
+     * requested mutable representation. The changes are reflected in the packet.
+     * If the length is unspecified, then the length of the part is chosen
+     * according to the current representation. The length of front popped part
+     * must be zero before calling this function. The flags parameter is a
+     * combination of Chunk::PeekFlag enumeration members.
+     */
+    // TODO: maybe it would be better to have updateAtFron and canUpdateAtFront methods in the chunk API
+    template <typename T>
+    void updateAtFront(std::function<void (const Ptr<T>&)> update, b length = b(-1), int flags = 0) {
+        const auto& chunk = peekAtFront<T>(length, flags);
+        // TODO: we have no way of knowing if chunk is an immutable copy of some part of the packet, so this is incorrect
+        const auto& mutableChunk = makeExclusivelyOwnedMutableChunk(chunk);
+        update(mutableChunk);
+        if (mutableChunk != chunk) {
+            eraseAtFront(chunk->getChunkLength());
+            insertAtFront(mutableChunk);
+        }
+        else {
+            mutableChunk->markImmutable();
+            totalLength = getTotalLength();
+        }
+    }
+
+    /**
+     * Updates the designated part by applying the provided function on the
+     * requested mutable representation. The changes are reflected in the packet.
+     * If the length is unspecified, then the length of the part is chosen
+     * according to the current representation. The length of back popped part
+     * must be zero before calling this function. The flags parameter is a
+     * combination of Chunk::PeekFlag enumeration members.
+     */
+    // TODO: maybe it would be better to have updateAtBack and canUpdateAtBack methods in the chunk API
+    template <typename T>
+    void updateAtBack(std::function<void (const Ptr<T>&)> update, b length, int flags = 0) {
+        const auto& chunk = peekAtBack<T>(length, flags);
+        // TODO: we have no way of knowing if chunk is an immutable copy of some part of the packet, so this is incorrect
+        const auto& mutableChunk = makeExclusivelyOwnedMutableChunk(chunk);
+        update(mutableChunk);
+        if (mutableChunk != chunk) {
+            eraseAtBack(chunk->getChunkLength());
+            insertAtBack(mutableChunk);
+        }
+        else {
+            mutableChunk->markImmutable();
+            totalLength = getTotalLength();
+        }
+    }
+
+    /**
+     * Updates the designated part by applying the provided function on the
+     * requested mutable representation. The changes are reflected in the packet.
+     * If the length is unspecified, then the length of the part is chosen
+     * according to the current representation. The length of back popped part
+     * must be zero before calling this function. The flags parameter is a
+     * combination of Chunk::PeekFlag enumeration members.
+     */
+    template <typename T>
+    void updateAt(std::function<void (const Ptr<T>&)> update, b offset, b length = b(-1), int flags = 0) {
+        // TODO: this is even more complicated
+    }
     //@}
 
     /** @name Tag related functions */
