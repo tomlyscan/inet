@@ -18,7 +18,13 @@
 
 #include "inet/common/Simsignals.h"
 #include "inet/common/ProtocolTag_m.h"
+<<<<<<< HEAD
+||||||| parent of cef7c1e5bd... temp: added macToMacDelay statistics.
+#include "inet/common/queue/IPassiveQueue.h"
+=======
+#include "inet/common/queue/IPassiveQueue.h"
 #include "inet/common/TimeTag_m.h"
+>>>>>>> cef7c1e5bd... temp: added macToMacDelay statistics.
 #include "inet/linklayer/common/InterfaceTag_m.h"
 #include "inet/linklayer/ethernet/EtherEncap.h"
 #include "inet/linklayer/ethernet/EtherFrame_m.h"

@@ -45,6 +45,19 @@ void DataAgeFilter::receiveSignal(cResultFilter *prev, simtime_t_cref t, cObject
     }
 }
 
+Register_ResultFilter("networkTravelTime", NetworkTravelTimeFilter);
+
+void NetworkTravelTimeFilter::receiveSignal(cResultFilter *prev, simtime_t_cref t, cObject *object, cObject *details)
+{
+    if (auto packet = dynamic_cast<Packet *>(object)) {
+        for (auto& region : packet->peekData()->getAllTags<CreationTimeTag>()) {
+            WeightedHistogramRecorder::cWeight weight(region.getLength().get());
+            fire(this, t, t - region.getTag()->getEnteringNetworkTime(), &weight);
+        }
+    }
+}
+
+
 Register_ResultFilter("messageAge", MessageAgeFilter);
 
 void MessageAgeFilter::receiveSignal(cResultFilter *prev, simtime_t_cref t, cObject *object, cObject *details)

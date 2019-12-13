@@ -11,4 +11,5 @@ namespace inet;
 class CreationTimeTag extends TagBase
 {
     simtime_t creationTime;
+    simtime_t enteringNetworkTime = -1;
 }

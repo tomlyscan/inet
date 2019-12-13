@@ -154,6 +154,7 @@ module EtherMacFullDuplex like IEtherMac
         @statistic[packetDropIncorrectlyReceived](title="packet drop: incorrectly received"; source=packetDropReasonIsIncorrectlyReceived(packetDropped); record=count,sum(packetBytes),vector(packetBytes); interpolationmode=none);
         @statistic[packetDropInterfaceDown](title="packet drop: interface down"; source=packetDropReasonIsInterfaceDown(packetDropped); record=count,sum(packetBytes),vector(packetBytes); interpolationmode=none);
         @statistic[packetDropNotAddressedToUs](title="packet drop: not addressed to us"; source=packetDropReasonIsNotAddressedToUs(packetDropped); record=count,sum(packetBytes),vector(packetBytes); interpolationmode=none);
+        @statistic[macToMacDelay](title="mac-to-mac delay"; source=networkTravelTime(packetReceivedFromLower); unit=s; record=histogram,vector; interpolationmode=none); //@add code
 
     gates:
         input upperLayerIn @labels(EtherFrame);    // to ~EtherEncap or ~IMacRelayUnit
