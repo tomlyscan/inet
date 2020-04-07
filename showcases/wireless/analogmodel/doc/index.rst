@@ -144,8 +144,8 @@ The unit disk receiver's :par:`ignoreInterference` parameter configures whether 
 
 The unit disk analog model is suitable for wireless simulations in which the details of the physical layer is not important, such as testing routing protocols. The following modules use the unit disk analog model:
 
-- :ned:`UnitDiskRadioMedium`: the only radio medium using the unit disk analog model; use/to be used with all unit disk radio types
-- :ned:`UnitDiskRadio`: generic radio using the unit disk analog model; contain :ned:`UnitDiskTransmitter` and :ned:`UnitDiskReceiver`
+- :ned:`UnitDiskRadioMedium`: the only radio medium using the unit disk analog model; to be used with all unit disk radio types
+- :ned:`UnitDiskRadio`: generic radio using the unit disk analog model; contains :ned:`UnitDiskTransmitter` and :ned:`UnitDiskReceiver`
 - :ned:`Ieee80211UnitDiskRadio`: unit disk version of Wifi; contains :ned:`Ieee80211UnitDiskTransmitter` and :ned:`Ieee80211UnitDiskReceiver`
 
 **TODO** mention AckingInterface ?
@@ -192,6 +192,34 @@ We'll demonstrate the unit disk analog model in an example scenario featuring mo
 .. figure:: media/unitdisknetwork2.png
    :width: 100%
    :align: center
+
+In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles **TODO** whats the communication range? is that important here?. The hosts use the AODV protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
+
+**TODO** why in this scenario unit disk is the right choice ?
+
+Here is the configuration in omnetpp.ini:
+
+.. literalinclude:: ../omnetpp.ini
+   :start-at: Config Routing3
+   :end-at: displayCommunicationRanges
+   :language: ini
+
+.. - sometimes there is connectivity between the two hosts
+   - sometimes there isnt
+
+Here is a video of the simulation running (successful ping message sends between the source and destination hosts are indicated with colored arrows; routes to destination are indicated with black arrows):
+
+TODO
+
+.. TODO display just the routes
+
+The source and destination hosts are connected intermittently. If the intermediate nodes move out of range before the routes can be built then there is no connectivity. This can happen if the nodes move too fast, as route formation takes time due to the AODV protocol overhead.
+
+.. - this can be used to run simulations to figure out how fast the nodes can move so that connectivity can be maintained
+   - as the AODV protocol has overhead
+   - if the intermediate nodes move out of range before the routes can be built then there would be no connectivity
+
+   - this should be in the intro part of this section ?
 
 Number of received packets vs distance (Scalar)
 -----------------------------------------------
