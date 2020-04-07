@@ -185,17 +185,23 @@ The unit disk analog model is suitable for wireless simulations in which the det
 
 We'll demonstrate the unit disk analog model in an example scenario featuring mobile adhoc hosts, which use the AODV protocol to maintain routes:
 
-.. figure:: media/unitdisknetwork.png
-   :width: 100%
-   :align: center
+.. .. figure:: media/unitdisknetwork.png
+      :width: 100%
+      :align: center
 
 .. figure:: media/unitdisknetwork2.png
    :width: 100%
    :align: center
 
-In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles **TODO** whats the communication range? is that important here?. The hosts use the AODV protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
+In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
 
-**TODO** why in this scenario unit disk is the right choice ?
+.. **TODO** why in this scenario unit disk is the right choice ?
+
+**V1** In this scenario, the emphasis is on the connectivity of the source and destination hosts,
+
+**V2** This scenario examines the connectivity of the source and destination hosts, 
+
+i.e. how the moving intermediate hosts can build temporary routes and relay the ping messages. In this context, the communication ranges of the hosts is an adequate abstraction of the physical layer communication, thus unit disk analog model is suitable for this purpose.
 
 Here is the configuration in omnetpp.ini:
 
