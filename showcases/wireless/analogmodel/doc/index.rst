@@ -199,7 +199,7 @@ In the simulation, ``source`` sends ping requests to ``destination``, and ``dest
 
 **V1** In this scenario, the emphasis is on the connectivity of the source and destination hosts,
 
-**V2** This scenario examines the connectivity of the source and destination hosts, 
+**V2** This scenario examines the connectivity of the source and destination hosts,
 
 i.e. how the moving intermediate hosts can build temporary routes and relay the ping messages. In this context, the communication ranges of the hosts is an adequate abstraction of the physical layer communication, thus unit disk analog model is suitable for this purpose.
 
@@ -236,6 +236,79 @@ Number of received packets vs distance (Scalar)
 - parameters, available models
 - config/network
 - results (show the BER/PER/number of packets)(should a study?)
+
+**V1** The scalar analog model represents transmissions with a scalar power value, a center frequency and a bandwidth, and might include other protocol features as well **TODO**. **TODO** there is also modulation.
+The scalar representation can model attenuation, and is able to compute a signal-to-noise-interference radio (SNIR). The SNIR is used by error models to calculate bit-error-rate and packet-error-rate. **TODO** this is a benefit...a limitation is that it cant simulate partially overlapping spectrums or realistic signal shapes both in frequency and time. it just simulates a boxcar signal in frequency and time. These can either completely overlap (interference) or not at all (no interference).
+
+**TODO** types
+
+--------
+
+about the scalar analog model
+
+interference
+
+types
+
+other protocol features
+
+--------
+
+.. The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. It models attenuation, so that the signal power decreases with distance from the transmitter.
+
+**V2** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth; it models attenuation. It uses these to calculate a signal-to-noise-interference ratio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
+
+Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+
+INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
+
+The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
+
+**V3** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth,
+and models protocol features such as preamble duration, head length, bitrate and modulation. It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
+
+**V3/1** Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+
+**V3/2** Signals are represented with a boxcar shape in frequency and time. When simulating interference/concurrent transmissions, signals can either completely overlap (same center frequency and bandwidth; signals interfere), or not overlap at all (no interference). The model cant simulate partially overlapping spectrums (results in an error) or realistic signal shapes in frequency and time.
+
+.. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+
+.. it just simulates a boxcar signal in frequency and time. These can either completely overlap (interference) or not at all (no interference). it cant simulate partially overlapping spectrums or realistic signal shapes both in frequency and time.
+
+INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
+
+The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
+
+
+
+  so
+
+  - parameters of scalar radio modules
+
+  There are various scalar radio and radio medium modules available in INET, such as TODO. The radios have parameters for power, center frequency and bandwidth, and other stuff...like the wifi radios have channel number, opmode, others have modulation etc
+
+    so
+
+    - there are radio and radio medium modules which use the scalar analog model...they have Scalar in their name
+    - they should be used together based on the name (Ieee80211ScalarRadio/Ieee80211ScalarRadioMedium, ApskScalarRadio/ApskScalarRadioMedium, etc)
+    - the radio has parameters like power, center frequency and bandwidth...sometimes these are set automatically like in Wifi (so you just specify a channel and an opmode)
+    - there are other parameters, like preamble duration, bitrate, etc...in wifi you just choose the opmode
+    - check the ned documentation of the various modules
+
+INET contains various radio and radio medium modules for different wireless technologies which use the scalar analog model; these modules have ``Scalar`` in their names, e.g. Ieee80211ScalarRadio, Ieee802154NarrowbandScalarRadio, AspkScalarRadio. The scalar radio types should be used with the corresponding radio medium module, e.g. Ieee80211ScalarRadio/Ieee80211ScalarRadioMedium, ApskScalarRadio/ApskScalarRadioMedium. The radio modules have parameters like power, center frequency and bandwidth, bitrate, preambleduration, etc. Some modules set these automatically, e.g. in Ieee80211ScalarRadio, one sets the :par:`opMode` (g,n(mixed),ac,etc) and channelNumber parameters, and the module sets the bandwidth, center frequency, and other parameters of transmitters and receivers automatically according to the IEEE 802.11 standard. In ApskScalarRadio, it should be set manually.
+
+**TODO** a list of modules
+
+In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The hosts have a distance...
+
+TODO this should be a study...no need for any video just a chart...received packets vs distance/SNIR vs distance?
+
+Here is the configuration in omnetpp.ini:
+
+.. literalinclude:: ../omnetpp.ini
+   :start-at: Config Distance2
+   :end-before: Config Noise
+   :language: ini
 
 Interference from a periodic noise source (Dimensional)
 -------------------------------------------------------
