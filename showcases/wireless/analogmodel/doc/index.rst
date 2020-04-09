@@ -254,6 +254,18 @@ other protocol features
 
 --------
 
+.. scalar model
+
+  main features are power, center frequency and bandwidth -> it models attenuation -> it uses all these to calculate a SNIR -> which is used by the error model to calculate BER and PER
+  other features are preambleDuration, bitrate, etc. Sometimes these are set in the transmitter (ApskRadio) but other technologies these are set automatically (Wifi)
+  you just specify a channelNumber and an opMode
+  It has a boxcar signal shape in frequency and time
+  This has high performance and its good for interference if the spectrums are the same (same Wifi channel)
+  And if they dont overlap at all then the transmissions are independent
+
+  There are scalar versions of the following wireless technologies in INET: IEEE 802.11, IEEE 802.15.4, and Apsk Radio.
+  Each have a radio module and a corresponding radio medium module.
+
 .. The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. It models attenuation, so that the signal power decreases with distance from the transmitter.
 
 **V2** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth; it models attenuation. It uses these to calculate a signal-to-noise-interference ratio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
