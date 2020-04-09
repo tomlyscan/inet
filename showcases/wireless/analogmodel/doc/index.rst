@@ -230,29 +230,29 @@ The source and destination hosts are connected intermittently. If the intermedia
 Number of received packets vs distance (Scalar)
 -----------------------------------------------
 
-- this example is about the scalar
-- why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels
-- drawbacks/benefits/degrees of freedom
-- parameters, available models
-- config/network
-- results (show the BER/PER/number of packets)(should a study?)
+  - **this example is about the scalar**
+  - **why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels**
+  - **drawbacks/benefits/degrees of freedom**
+  - parameters, available models
+  - **config/network**
+  - **results (show the BER/PER/number of packets)(should a study?)**
 
-**V1** The scalar analog model represents transmissions with a scalar power value, a center frequency and a bandwidth, and might include other protocol features as well **TODO**. **TODO** there is also modulation.
-The scalar representation can model attenuation, and is able to compute a signal-to-noise-interference radio (SNIR). The SNIR is used by error models to calculate bit-error-rate and packet-error-rate. **TODO** this is a benefit...a limitation is that it cant simulate partially overlapping spectrums or realistic signal shapes both in frequency and time. it just simulates a boxcar signal in frequency and time. These can either completely overlap (interference) or not at all (no interference).
+.. **V1** The scalar analog model represents transmissions with a scalar power value, a center frequency and a bandwidth, and might include other protocol features as well **TODO**. **TODO** there is also modulation.
+   The scalar representation can model attenuation, and is able to compute a signal-to-noise-interference radio (SNIR). The SNIR is used by error models to calculate bit-error-rate and packet-error-rate. **TODO** this is a benefit...a limitation is that it cant simulate partially overlapping spectrums or realistic signal shapes both in frequency and time. it just simulates a boxcar signal in frequency and time. These can either completely overlap (interference) or not at all (no interference).
 
-**TODO** types
+.. **TODO** types
 
---------
+.. --------
 
-about the scalar analog model
+   about the scalar analog model
 
-interference
+   interference
 
-types
+   types
 
-other protocol features
+   other protocol features
 
---------
+   --------
 
 .. scalar model
 
@@ -268,22 +268,22 @@ other protocol features
 
 .. The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. It models attenuation, so that the signal power decreases with distance from the transmitter.
 
-**V2.1** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth; it models attenuation. It uses these to calculate a signal-to-noise-interference ratio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
+.. **V2.1** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth; it models attenuation. It uses these to calculate a signal-to-noise-interference ratio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
 
-**V2.2** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. The scalar representation models attenuation, and is able to calculate a signal-to-noise-interference radio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
+**V2** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. The scalar representation models attenuation, and is able to calculate a signal-to-noise-interference radio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
 
-Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+.. Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
 
-INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
+.. INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
 
-The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
+.. The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
 
 **V3** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth,
 and models protocol features such as preamble duration, head length, bitrate and modulation. It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
 
-**V3/1** Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
 
-**V3/2** Signals are represented with a boxcar shape in frequency and time. When simulating interference/concurrent transmissions, signals can either completely overlap (same center frequency and bandwidth; signals interfere), or not overlap at all (no interference). The model cant simulate partially overlapping spectrums (results in an error) or realistic signal shapes in frequency and time.
+.. **V3/2** Signals are represented with a boxcar shape in frequency and time. When simulating interference/concurrent transmissions, signals can either completely overlap (same center frequency and bandwidth; signals interfere), or not overlap at all (no interference). The model cant simulate partially overlapping spectrums (results in an error) or realistic signal shapes in frequency and time.
 
 .. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
 
@@ -292,6 +292,7 @@ and models protocol features such as preamble duration, head length, bitrate and
 INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
 
 The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
+**TODO** also set centerfrequency bandwidth with parameters
 
 
 
