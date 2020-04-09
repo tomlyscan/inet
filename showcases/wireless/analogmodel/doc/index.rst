@@ -268,7 +268,9 @@ other protocol features
 
 .. The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. It models attenuation, so that the signal power decreases with distance from the transmitter.
 
-**V2** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth; it models attenuation. It uses these to calculate a signal-to-noise-interference ratio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
+**V2.1** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth; it models attenuation. It uses these to calculate a signal-to-noise-interference ratio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
+
+**V2.2** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth. The scalar representation models attenuation, and is able to calculate a signal-to-noise-interference radio (SNIR) at reception. The SNIR can be used by error models to calculate bit error rate and packet error rate of receptions.
 
 Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
 
