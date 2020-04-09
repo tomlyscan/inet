@@ -296,7 +296,7 @@ The scalar analog representation also models features of protocols such as pream
 
 
 
-  so
+..  so
 
   - parameters of scalar radio modules
 
@@ -310,9 +310,9 @@ The scalar analog representation also models features of protocols such as pream
     - there are other parameters, like preamble duration, bitrate, etc...in wifi you just choose the opmode
     - check the ned documentation of the various modules
 
-INET contains various radio and radio medium modules for different wireless technologies which use the scalar analog model; these modules have ``Scalar`` in their names, e.g. Ieee80211ScalarRadio, Ieee802154NarrowbandScalarRadio, AspkScalarRadio. The scalar radio types should be used with the corresponding radio medium module, e.g. Ieee80211ScalarRadio/Ieee80211ScalarRadioMedium, ApskScalarRadio/ApskScalarRadioMedium. The radio modules have parameters like power, center frequency and bandwidth, bitrate, preambleduration, etc. Some modules set these automatically, e.g. in Ieee80211ScalarRadio, one sets the :par:`opMode` (g,n(mixed),ac,etc) and channelNumber parameters, and the module sets the bandwidth, center frequency, and other parameters of transmitters and receivers automatically according to the IEEE 802.11 standard. In ApskScalarRadio, it should be set manually.
+.. INET contains various radio and radio medium modules for different wireless technologies which use the scalar analog model; these modules have ``Scalar`` in their names, e.g. Ieee80211ScalarRadio, Ieee802154NarrowbandScalarRadio, AspkScalarRadio. The scalar radio types should be used with the corresponding radio medium module, e.g. Ieee80211ScalarRadio/Ieee80211ScalarRadioMedium, ApskScalarRadio/ApskScalarRadioMedium. The radio modules have parameters like power, center frequency and bandwidth, bitrate, preambleduration, etc. Some modules set these automatically, e.g. in Ieee80211ScalarRadio, one sets the :par:`opMode` (g,n(mixed),ac,etc) and channelNumber parameters, and the module sets the bandwidth, center frequency, and other parameters of transmitters and receivers automatically according to the IEEE 802.11 standard. In ApskScalarRadio, it should be set manually.
 
-**TODO** a list of modules
+.. **TODO** a list of modules
 
 In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The hosts have a distance...
 
@@ -334,3 +334,34 @@ Interference from a periodic noise source (Dimensional)
 - drawbacks/benefits/degrees of freedom
 - config/network
 - results (spectrum figure, spectrogram, inspector)
+
+The dimensional analog model is the most sophisticated analog signal representation in INET. It models arbitrary signal shapes in frequency and time. It can also model interference more realistically than the scalar model. /It can model interference even between different technologies (cross-technology interference). It can simulate partially overlapping signals in frequency and time. The spectrums can also be visualized with spectrum figures and spectrograms and power density map...
+the drawback is performance, everything else is a benefit...accuracy
+
+  so
+
+  - the dimensional analog model represents signals a multi-dimensional function of power vs time and frequency
+  - it can model realistic/arbitrary signal shapes in frequency and time
+  - it can simulate partially overlapping signals in frequency and time/partially overlapping signal spectrums
+  - it can simulate interference even between different technologies (cti)
+  - it is the most accurate
+  - the only drawback is performance
+  - the spectrums can be visualized
+
+  - how to define signal shapes
+  - the listening part/other parts can still cause interference
+  - minSnir/meanSnir
+
+  - types
+
+The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums. It can also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+
+**TODO** normalization parameters
+
+The signal shapes can be configured using the :par:`timeGains` and :par:`frequencyGains` parameters of dimensional transmitters.
+
+**TODO** briefly about the syntax
+
+The signal shape in frequency can be defined by values of frequency-gain pairs; a pair defines a point on the frequency-power axis. The interpolation mode between two points can be specified with keywords between two frequency-gain pairs, such as TODO.
+
+INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio, and the corresponding radio medium modules.
