@@ -181,3 +181,29 @@ network AnalogModelShowcaseDistanceNetwork
             @display("p=363.448,180.72");
         }
 }
+
+network AnalogModelShowcaseDistanceNetwork4
+{
+    parameters:
+        @display("bgb=901.5187,376.65");
+    submodules:
+        visualizer: IntegratedVisualizer {
+            parameters:
+                @display("p=64.256,62.247997");
+        }
+        configurator: Ipv4NetworkConfigurator {
+            parameters:
+                @display("p=64.256,180.72");
+        }
+        radioMedium: Ieee80211ScalarRadioMedium {
+            parameters:
+                @display("p=62.247997,287.14398");
+        }
+        destination: AdhocHost {
+            parameters:
+                @display("p=500,179.60625");
+        }
+        source: AdhocHost {
+            @display("p=363.448,180.72");
+        }
+}
