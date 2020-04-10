@@ -314,16 +314,28 @@ The scalar analog representation also models features of protocols such as pream
 
 .. **TODO** a list of modules
 
-In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The hosts have a distance...
+.. In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The hosts have a distance...
 
-TODO this should be a study...no need for any video just a chart...received packets vs distance/SNIR vs distance?
+In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The source host is stationary, the destination host moves away from the source host. As the distance increases between them, the SNIR and packet error rate increase, so as the number of successfully received transmissions.
+
+.. TODO this should be a study...no need for any video just a chart...received packets vs distance/SNIR vs distance?
 
 Here is the configuration in omnetpp.ini:
 
 .. literalinclude:: ../omnetpp.ini
-   :start-at: Config Distance2
-   :end-before: Config Noise
+   :start-at: Config Distance4
+   :end-at: channelAccess
    :language: ini
+
+The source host is configured to use the default 802.11g mode, and 54Mbps data rate.
+
+Here is a video of the simulation (successful link-layer transmissions are indicated with arrows; incorrectly received packets are indicated with packet drop animations):
+
+.. video:: media/Distance4.mp4
+   :width: 100%
+
+As the distance increases between the two hosts, the packet error rate and the SNIR increase, and packets are dropped.
+Note that the communication range of the source host is indicated with a blue circle. Beyond the circle, transmissions cannot be received correctly, and as an optimization, the radio medium module doesn't send them to the destination host, thus there are no packet drop animations.
 
 Interference from a periodic noise source (Dimensional)
 -------------------------------------------------------

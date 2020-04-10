@@ -187,7 +187,7 @@ network AnalogModelShowcaseDistanceNetwork4
     parameters:
         @display("bgb=901.5187,376.65");
     submodules:
-        visualizer: IntegratedVisualizer {
+        visualizer: IntegratedMultiVisualizer {
             parameters:
                 @display("p=64.256,62.247997");
         }
