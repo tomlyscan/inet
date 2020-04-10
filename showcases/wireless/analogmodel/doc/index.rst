@@ -217,6 +217,11 @@ Here is a video of the simulation running (successful ping message sends between
 
 TODO
 
+.. video:: media/Aodv5_s.mp4
+   :width: 80%
+
+**TODO** communication range
+
 .. TODO display just the routes
 
 The source and destination hosts are connected intermittently. If the intermediate nodes move out of range before the routes can be built then there is no connectivity. This can happen if the nodes move too fast, as route formation takes time due to the AODV protocol overhead.
@@ -230,12 +235,12 @@ The source and destination hosts are connected intermittently. If the intermedia
 Number of received packets vs distance (Scalar)
 -----------------------------------------------
 
-  - **this example is about the scalar**
+  - this example is about the scalar
   - **why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels**
   - **drawbacks/benefits/degrees of freedom**
   - parameters, available models
-  - **config/network**
-  - **results (show the BER/PER/number of packets)(should a study?)**
+  - config/network
+  - results (show the BER/PER/number of packets)(should a study?)
 
 .. **V1** The scalar analog model represents transmissions with a scalar power value, a center frequency and a bandwidth, and might include other protocol features as well **TODO**. **TODO** there is also modulation.
    The scalar representation can model attenuation, and is able to compute a signal-to-noise-interference radio (SNIR). The SNIR is used by error models to calculate bit-error-rate and packet-error-rate. **TODO** this is a benefit...a limitation is that it cant simulate partially overlapping spectrums or realistic signal shapes both in frequency and time. it just simulates a boxcar signal in frequency and time. These can either completely overlap (interference) or not at all (no interference).
@@ -333,6 +338,8 @@ Here is a video of the simulation (successful link-layer transmissions are indic
 
 .. video:: media/Distance4.mp4
    :width: 100%
+
+.. normal run, playback speed 1, animation speed 0.1, run until 6.5s
 
 As the distance increases between the two hosts, the packet error rate and the SNIR increase, and packets are dropped.
 Note that the communication range of the source host is indicated with a blue circle. Beyond the circle, transmissions cannot be received correctly, and as an optimization, the radio medium module doesn't send them to the destination host, thus there are no packet drop animations.
