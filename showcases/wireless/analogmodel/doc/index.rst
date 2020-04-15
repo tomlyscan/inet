@@ -197,11 +197,10 @@ In the simulation, ``source`` sends ping requests to ``destination``, and ``dest
 
 .. **TODO** why in this scenario unit disk is the right choice ?
 
-**V1** In this scenario, the emphasis is on the connectivity of the source and destination hosts,
+.. **V1** In this scenario, the emphasis is on the connectivity of the source and destination hosts,
 
-**V2** This scenario examines the connectivity of the source and destination hosts,
-
-i.e. how the moving intermediate hosts can build temporary routes and relay the ping messages. In this context, the communication ranges of the hosts is an adequate abstraction of the physical layer communication, thus unit disk analog model is suitable for this purpose.
+This scenario examines the connectivity of the source and destination hosts,
+i.e. how the moving intermediate hosts can build temporary routes and relay the ping messages. In this context, the communication ranges of the hosts is an adequate abstraction of the physical layer communication, thus the unit disk analog model is suitable for this purpose.
 
 Here is the configuration in omnetpp.ini:
 
@@ -384,3 +383,25 @@ The signal shapes can be configured using the :par:`timeGains` and :par:`frequen
 The signal shape in frequency can be defined by values of frequency-gain pairs; a pair defines a point on the frequency-power axis. The interpolation mode between two points can be specified with keywords between two frequency-gain pairs, such as TODO.
 
 INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio, and the corresponding radio medium modules.
+
+The signal shapes in frequency and time can be defined with the :par:`frequencyGains` and :par:`timeGains` parameters of transmitter modules. For example, signal shapes in frequency can be defined as follows:
+
+.. - the spectrum is specified as points in the frequency-power graph
+  - a point is specified with a frequency-gain pair
+  - interpolation of the spectrum function is specified between points with keywords (such as linear, left, right, etc)
+
+Here is an example signal spectrum:
+
+.. code-block:: ini
+
+   **.frequencyGains = "left c-b*1.5 -40dB linear c-b -28dB linear c+b -28dB linear c+b*1.5 -40dB right"
+
+Briefly about the syntax (applies to the :par:`timeGains` parameter as well):
+
+.. including 'Briefly about the syntax:' section from Coexistence
+
+.. include:: ../../coexistence/doc/index.rst
+   :start-after: Briefly about the syntax:
+   :end-before: For more on the syntax
+
+INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio.
