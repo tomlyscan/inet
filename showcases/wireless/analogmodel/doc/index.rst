@@ -356,6 +356,99 @@ Interference from a periodic noise source (Dimensional)
 The dimensional analog model is the most sophisticated analog signal representation in INET. It models arbitrary signal shapes in frequency and time. It can also model interference more realistically than the scalar model. /It can model interference even between different technologies (cross-technology interference). It can simulate partially overlapping signals in frequency and time. The spectrums can also be visualized with spectrum figures and spectrograms and power density map...
 the drawback is performance, everything else is a benefit...accuracy
 
+  The dimensional analog model uses a multi-dimensional function API to
+
+  - represent signals as multi-dimensional functions (power density vs time and frequency)
+  - create signal representation with composition of function primitives/primitives and composition
+  - create signal representation by composition of primitives
+  - available functions:
+    - boxcar function
+    - linear function
+    - interpolated function
+    - multiplication/division/addition/substration -> to model snir, attenuation
+    - shift function -> to shift a signal shape in time and frequency
+    - get the min, max, mean and integral of functions over a multi-dimensional interval
+    - partitioning -> composition of complex signal shapes from primitive functions (such as constant, linear, interpolated, reciprocal, etc)
+    - domainlimit?, boxcar, shift, approximate, integrate, (memoize)
+
+The dimensional analog model uses a multi-dimensional mathemitical API to create signal representations. Signals are represented as a multi-dimensional function, i.e. power density over time and frequency. Arbitrary signal shapes/functions can be created using primitives and composition, and various other functions:
+
+- primitives:
+
+  - constant over all dimensions
+  - **linear**: linear in 1 dimension, constant in the others
+  - **bilinear**: linear in 2 dimensions, constant in the other
+  - **reciprocal**: reciprocal in 1 dimension, constant in the others
+
+- functions that work on primitives:
+
+  - **limit domain**: limit the function domain in 1 or 2 dimensions/from left, right or both?
+  - **boxcar function**: constant + limit domain? is that already a composite?
+  - **shift**: shift the function in time or frequency
+  - **approximate**: approximate function at arbitrary points using interpolation
+  - **integrate**: integrate function over a multi-dimensional interval (e.g. to get signal power)
+  - get **min**, **max**, **mean** over a multi-dimensional interval (e.g. for calculating snir)
+  - **add/substract**: for calculating interference
+  - **multiply**: for applying transmission power, calculating attenuation
+  - **divide**: for calculating snir
+  - **partitioning**: composition of complex functions from primitives
+
+it works like this:
+
+| /--\\ -> the function
+
+- domain limited linear + constant boxcar + domain limited linear
+- shift in time to account for propagation duration
+- shift in frequency to actual wifi channel
+- multiply by transmission power
+- multiply by attenuation
+- divide by background noise power density
+- apply getMin to get minSnir?
+- also integrate over the domain to get transmission power at reception (for some reason)
+
+The Ieee80211DimensionalTransmitter in INET uses this API to create transmissions.
+And the thing in the ini file is just syntactic salt
+
+--------
+
+The multi-dimensional analog model uses an efficient generic purpose multi-dimensional mathematical function API. The analog model represents signal spectral power density [W/Hz] as a multi-dimensional function of time [s] and frequency [Hz].
+
+The generic purpose multidimensional function API provides primitive functions (e.g. constant function), function compositions (e.g. function addition), and allows creating new functions either by implementing the required C++ interface or by combining existing implementations.
+
+primitive functions:
+
+- multi-dimensional constant function
+- multi-dimensional unilinear function, linear in 1 dimension, constant in the others
+- multi-dimensional bilinear function, linear in 2 dimensions, constant in the others
+- multi-dimensional unireciprocal function, reciprocal in 1 dimension, constant in the others
+- boxcar function in 1D and 2D, being non-zero in a specific range and zero anywhere else
+- standard gauss function in 1D
+- sawtooth function in 1D that allows creating chirp signals
+- interpolated function with samples on a grid in 1D and 2D
+- generic interpolated function with arbitrary samples and interpolations between them
+
+function compositions:
+
+- algebraic operations: addition, subtraction, multiplication, division
+- limiting function domain, shifting function domain, modulating function domain
+- combination of two 1D functions into a 2D function
+- approximation in selected dimension
+- integration in selected dimension
+- etc.
+
+interpolators:
+- left/right/closer
+- min/max/average
+- linear
+
+--------
+
+this is good because its nearly has the same performance as the scalar
+but it is more complex, there is composition
+better accuracy...can be extended with the API
+can make use of better error models
+actually can simulate per symbol snir
+
   so
 
   - the dimensional analog model represents signals a multi-dimensional function of power vs time and frequency
