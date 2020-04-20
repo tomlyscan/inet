@@ -219,6 +219,9 @@ TODO
 .. video:: media/Aodv5_s.mp4
    :width: 80%
 
+.. video:: media/unitdisk1.mp4
+   :width: 80%
+
 **TODO** communication range
 
 .. TODO display just the routes
@@ -441,6 +444,16 @@ interpolators:
 - min/max/average
 - linear
 
+The API is used by dimensional transmitters and receivers. Here are some examples:
+
+- The boxcar function can be used to create signals with a specific bandwidth
+- The domain shifting function is used to place signals on the frequency spectrum,
+and shift them to the appropriate time when they are transmitted
+- Multiplication can be used to apply transmission power and attenuation
+- Addition can be used to sum interfering signals
+- Division can be used to calculate SNIR by dividing the received signal with interfering signals
+- Partitioning can be used to construct complex signals in frequency and time from primitives
+
 --------
 
 this is good because its nearly has the same performance as the scalar
@@ -448,6 +461,18 @@ but it is more complex, there is composition
 better accuracy...can be extended with the API
 can make use of better error models
 actually can simulate per symbol snir
+
+The dimensional analog model has comparable performance to the scalar model, but it is more
+accurate and can model interference with partially overlapping spectrums.
+
+so what i wanna say is
+
+The dimensional analog model uses the api to create signals, and transmitters use that to create signals?
+
+so actually in ieee80211dimesionaltransmitter, there is a line which uses this api to create the signal
+
+so the dimensional analog model is in the radio medium module and the transmitters just create
+dimensional transmissions and that is part of the dimensional model
 
   so
 
