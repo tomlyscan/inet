@@ -349,17 +349,20 @@ Note that the communication range of the source host is indicated with a blue ci
 Interference from a periodic noise source (Dimensional)
 -------------------------------------------------------
 
-- this example is about dimensional
-- why is it good for this purpose? cos need to model the spectrums accurately. there are two channels which overlap, the noise generator has a different spectrum, and short transmissions which might not be enough in time to corrupt the wifi nodes' transmissions
-- parameters, available models
-- drawbacks/benefits/degrees of freedom
-- config/network
-- results (spectrum figure, spectrogram, inspector)
+.. - this example is about dimensional
+  - why is it good for this purpose? cos need to model the spectrums accurately. there are two channels which overlap, the noise generator has a different spectrum, and short transmissions which might not be enough in time to corrupt the wifi nodes' transmissions
+  - parameters, available models
+  - drawbacks/benefits/degrees of freedom
+  - config/network
+  - results (spectrum figure, spectrogram, inspector)
 
-The dimensional analog model is the most sophisticated analog signal representation in INET. It models arbitrary signal shapes in frequency and time. It can also model interference more realistically than the scalar model. /It can model interference even between different technologies (cross-technology interference). It can simulate partially overlapping signals in frequency and time. The spectrums can also be visualized with spectrum figures and spectrograms and power density map...
-the drawback is performance, everything else is a benefit...accuracy
+.. The dimensional analog model is the most sophisticated analog signal representation in INET. It can model arbitrary signal shapes in frequency and time. It can also model interference more realistically than the scalar model. /It can model interference even between different technologies (cross-technology interference). It can simulate partially overlapping signals in frequency and time. The spectrums can also be visualized with spectrum figures and spectrograms and power density map...
 
-  The dimensional analog model uses a multi-dimensional function API to
+The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums. It can also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+
+.. the drawback is performance, everything else is a benefit...accuracy
+
+.. The dimensional analog model uses a multi-dimensional function API to
 
   - represent signals as multi-dimensional functions (power density vs time and frequency)
   - create signal representation with composition of function primitives/primitives and composition
@@ -374,49 +377,50 @@ the drawback is performance, everything else is a benefit...accuracy
     - partitioning -> composition of complex signal shapes from primitive functions (such as constant, linear, interpolated, reciprocal, etc)
     - domainlimit?, boxcar, shift, approximate, integrate, (memoize)
 
-The dimensional analog model uses a multi-dimensional mathemitical API to create signal representations. Signals are represented as a multi-dimensional function, i.e. power density over time and frequency. Arbitrary signal shapes/functions can be created using primitives and composition, and various other functions:
+.. The dimensional analog model uses a multi-dimensional mathemitical API to create signal representations. Signals are represented as a multi-dimensional function, i.e. power density over time and frequency. Arbitrary signal shapes/functions can be created using primitives and composition, and various other functions:
 
-- primitives:
+  - primitives:
 
-  - constant over all dimensions
-  - **linear**: linear in 1 dimension, constant in the others
-  - **bilinear**: linear in 2 dimensions, constant in the other
-  - **reciprocal**: reciprocal in 1 dimension, constant in the others
+    - constant over all dimensions
+    - **linear**: linear in 1 dimension, constant in the others
+    - **bilinear**: linear in 2 dimensions, constant in the other
+    - **reciprocal**: reciprocal in 1 dimension, constant in the others
 
-- functions that work on primitives:
+  - functions that work on primitives:
 
-  - **limit domain**: limit the function domain in 1 or 2 dimensions/from left, right or both?
-  - **boxcar function**: constant + limit domain? is that already a composite?
-  - **shift**: shift the function in time or frequency
-  - **approximate**: approximate function at arbitrary points using interpolation
-  - **integrate**: integrate function over a multi-dimensional interval (e.g. to get signal power)
-  - get **min**, **max**, **mean** over a multi-dimensional interval (e.g. for calculating snir)
-  - **add/substract**: for calculating interference
-  - **multiply**: for applying transmission power, calculating attenuation
-  - **divide**: for calculating snir
-  - **partitioning**: composition of complex functions from primitives
+    - **limit domain**: limit the function domain in 1 or 2 dimensions/from left, right or both?
+    - **boxcar function**: constant + limit domain? is that already a composite?
+    - **shift**: shift the function in time or frequency
+    - **approximate**: approximate function at arbitrary points using interpolation
+    - **integrate**: integrate function over a multi-dimensional interval (e.g. to get signal power)
+    - get **min**, **max**, **mean** over a multi-dimensional interval (e.g. for calculating snir)
+    - **add/substract**: for calculating interference
+    - **multiply**: for applying transmission power, calculating attenuation
+    - **divide**: for calculating snir
+    - **partitioning**: composition of complex functions from primitives
 
-it works like this:
+  it works like this:
 
-| /--\\ -> the function
+  | /--\\ -> the function
 
-- domain limited linear + constant boxcar + domain limited linear
-- shift in time to account for propagation duration
-- shift in frequency to actual wifi channel
-- multiply by transmission power
-- multiply by attenuation
-- divide by background noise power density
-- apply getMin to get minSnir?
-- also integrate over the domain to get transmission power at reception (for some reason)
+  - domain limited linear + constant boxcar + domain limited linear
+  - shift in time to account for propagation duration
+  - shift in frequency to actual wifi channel
+  - multiply by transmission power
+  - multiply by attenuation
+  - divide by background noise power density
+  - apply getMin to get minSnir?
+  - also integrate over the domain to get transmission power at reception (for some reason)
 
-The Ieee80211DimensionalTransmitter in INET uses this API to create transmissions.
-And the thing in the ini file is just syntactic salt
+  The Ieee80211DimensionalTransmitter in INET uses this API to create transmissions.
+  And the thing in the ini file is just syntactic salt
 
 --------
 
 The multi-dimensional analog model uses an efficient generic purpose multi-dimensional mathematical function API. The analog model represents signal spectral power density [W/Hz] as a multi-dimensional function of time [s] and frequency [Hz].
 
-The generic purpose multidimensional function API provides primitive functions (e.g. constant function), function compositions (e.g. function addition), and allows creating new functions either by implementing the required C++ interface or by combining existing implementations.
+The API provides primitive functions (e.g. constant function), function compositions (e.g. function addition), and allows creating new functions either by implementing the required C++ interface or by combining existing implementations.
+Here are some example functions provided by the API:
 
 primitive functions:
 
@@ -424,7 +428,7 @@ primitive functions:
 - multi-dimensional unilinear function, linear in 1 dimension, constant in the others
 - multi-dimensional bilinear function, linear in 2 dimensions, constant in the others
 - multi-dimensional unireciprocal function, reciprocal in 1 dimension, constant in the others
-- boxcar function in 1D and 2D, being non-zero in a specific range and zero anywhere else
+- boxcar function in 1D and 2D, being non-zero in a specific range and zero everywhere else
 - standard gauss function in 1D
 - sawtooth function in 1D that allows creating chirp signals
 - interpolated function with samples on a grid in 1D and 2D
@@ -437,72 +441,95 @@ function compositions:
 - combination of two 1D functions into a 2D function
 - approximation in selected dimension
 - integration in selected dimension
-- etc.
 
 interpolators:
-- left/right/closer
+
+- left/right/closer (between two points, use the value of the left/right point, or closer?)
 - min/max/average
 - linear
 
-The API is used by dimensional transmitters and receivers. Here are some examples:
+.. **V1** The API is used by dimensional transmitters and receivers. Here are some examples:
 
-- The boxcar function can be used to create signals with a specific bandwidth
-- The domain shifting function is used to place signals on the frequency spectrum,
-and shift them to the appropriate time when they are transmitted
-- Multiplication can be used to apply transmission power and attenuation
-- Addition can be used to sum interfering signals
-- Division can be used to calculate SNIR by dividing the received signal with interfering signals
-- Partitioning can be used to construct complex signals in frequency and time from primitives
+  - The boxcar function can be used to create signals with a specific bandwidth
+  - The domain shifting function is used to place signals on the frequency spectrum,
+    and shift them to the appropriate time when they are transmitted
+  - Multiplication can be used to apply transmission power and attenuation
+  - Addition can be used to sum interfering signals
+  - Division can be used to calculate SNIR by dividing the received signal with interfering signals
+  - Partitioning can be used to construct complex signals in frequency and time from primitives
+
+.. The dimensional transmitters in INET use the API to create transmissions. For example, The boxcar function can be used to create signals with a specific bandwidth. The domain shifting function is used to place signals on the frequency spectrum, and to the appropriate point in time. Transmission power and attenuation is applied with the multiplication function. Interfering signals are summed with the addition function. SNIR is calculated by dividing the received signal with interfering signals.
+   Signals with a complex spectrum are constructed from primitives with the partitioning function.
+
+.. **V2** The dimensional transmitters in INET use the API to create transmissions. For example:
+
+  - The boxcar function can be used to create signals with a specific bandwidth.
+  - The domain shifting function is used to place signals on the frequency spectrum, and to the appropriate point in time.
+  - Transmission power and attenuation is applied with the multiplication function.
+  - Interfering signals are summed with the addition function.
+  - SNIR is calculated by dividing the received signal with interfering signals.
+  - Signals with a complex spectrum are constructed from primitives with the partitioning function.
+
+The dimensional transmitters in INET use the API to create transmissions. For example:
+
+- The boxcar function is used to create a signal with a specific bandwidth; it's also used to set the signal's duration in time
+- The domain shifting function is used to place it on the frequency spectrum, and to the appropriate point in time.
+- Transmission power and attenuation is applied with the multiplication function.
+- Interfering signals are summed with the addition function.
+- SNIR is calculated by dividing the received signal with interfering signals.
+- Signals with a complex spectrum are constructed from primitives with the partitioning function.
+
+INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4, and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form). TODO parameters
 
 --------
 
-this is good because its nearly has the same performance as the scalar
-but it is more complex, there is composition
-better accuracy...can be extended with the API
-can make use of better error models
-actually can simulate per symbol snir
+  this is good because its nearly has the same performance as the scalar
+  but it is more complex, there is composition
+  better accuracy...can be extended with the API
+  can make use of better error models
+  actually can simulate per symbol snir
 
-The dimensional analog model has comparable performance to the scalar model, but it is more
-accurate and can model interference with partially overlapping spectrums.
+.. The dimensional analog model has comparable performance to the scalar model, but it is more
+   accurate and can model interference with partially overlapping spectrums.
 
-so what i wanna say is
+  so what i wanna say is
 
-The dimensional analog model uses the api to create signals, and transmitters use that to create signals?
+  The dimensional analog model uses the api to create signals, and transmitters use that to create signals?
 
-so actually in ieee80211dimesionaltransmitter, there is a line which uses this api to create the signal
+  so actually in ieee80211dimesionaltransmitter, there is a line which uses this api to create the signal
 
-so the dimensional analog model is in the radio medium module and the transmitters just create
-dimensional transmissions and that is part of the dimensional model
+  so the dimensional analog model is in the radio medium module and the transmitters just create
+  dimensional transmissions and that is part of the dimensional model
 
-  so
+    so
 
-  - the dimensional analog model represents signals a multi-dimensional function of power vs time and frequency
-  - it can model realistic/arbitrary signal shapes in frequency and time
-  - it can simulate partially overlapping signals in frequency and time/partially overlapping signal spectrums
-  - it can simulate interference even between different technologies (cti)
-  - it is the most accurate
-  - the only drawback is performance
-  - the spectrums can be visualized
+    - the dimensional analog model represents signals a multi-dimensional function of power vs time and frequency
+    - it can model realistic/arbitrary signal shapes in frequency and time
+    - it can simulate partially overlapping signals in frequency and time/partially overlapping signal spectrums
+    - it can simulate interference even between different technologies (cti)
+    - it is the most accurate
+    - the only drawback is performance
+    - the spectrums can be visualized
 
-  - how to define signal shapes
-  - the listening part/other parts can still cause interference
-  - minSnir/meanSnir
+    - how to define signal shapes
+    - the listening part/other parts can still cause interference
+    - minSnir/meanSnir
 
-  - types
-
-The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums. It can also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+    - types
 
 **TODO** normalization parameters
 
-The signal shapes can be configured using the :par:`timeGains` and :par:`frequencyGains` parameters of dimensional transmitters.
+.. The signal shapes can be configured using the :par:`timeGains` and :par:`frequencyGains` parameters of dimensional transmitters.
 
-**TODO** briefly about the syntax
+.. **TODO** briefly about the syntax
 
-The signal shape in frequency can be defined by values of frequency-gain pairs; a pair defines a point on the frequency-power axis. The interpolation mode between two points can be specified with keywords between two frequency-gain pairs, such as TODO.
+.. The signal shape in frequency can be defined by values of frequency-gain pairs; a pair defines a point on the frequency-power diagram/graph. The interpolation mode between two points can be specified with keywords between two frequency-gain pairs, such as TODO.
 
-INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio, and the corresponding radio medium modules.
+  INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio, and the corresponding radio medium modules.
 
-The signal shapes in frequency and time can be defined with the :par:`frequencyGains` and :par:`timeGains` parameters of transmitter modules. For example, signal shapes in frequency can be defined as follows:
+The signal shapes in frequency and time can be defined with the :par:`frequencyGains` and :par:`timeGains` parameters of transmitter modules.
+
+.. For example, signal shapes in frequency can be defined as follows:
 
 .. - the spectrum is specified as points in the frequency-power graph
   - a point is specified with a frequency-gain pair
@@ -522,4 +549,12 @@ Briefly about the syntax (applies to the :par:`timeGains` parameter as well):
    :start-after: Briefly about the syntax:
    :end-before: For more on the syntax
 
-INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio.
+The parameter value above describes the following spectrum (displayed on a spectrum figure):
+
+.. figure:: media/spectrum.png
+   :width: 50%
+   :align: center
+
+Note that even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
+
+.. INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio.
