@@ -234,3 +234,34 @@ network AnalogModelShowcaseDistanceNetwork4
             @display("p=363.448,180.72");
         }
 }
+
+network AnalogModelShowcaseNoiseNetwork5
+{
+    @display("bgb=400,400");
+    submodules:
+
+        configurator: Ipv4NetworkConfigurator {
+            @display("p=35,40");
+        }
+        radioMedium: Ieee80211DimensionalRadioMedium {
+            @display("p=32,113");
+        }
+        visualizer: IntegratedVisualizer {
+            @display("p=37,185");
+        }
+        host1: AdhocHost {
+            @display("p=144,79");
+        }
+        host2: AdhocHost {
+            @display("p=105,154");
+        }
+        host3: AdhocHost {
+            @display("p=350,79");
+        }
+        host4: AdhocHost {
+            @display("p=298,160");
+        }
+        noiseSource: NoiseSource {
+            @display("p=221,132");
+        }
+}

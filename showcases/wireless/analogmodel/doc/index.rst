@@ -558,3 +558,6 @@ The parameter value above describes the following spectrum (displayed on a spect
 Note that even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
 
 .. INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio.
+
+.. video:: media/noise1.mp4
+   :width: 100%
