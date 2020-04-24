@@ -265,3 +265,6 @@ network AnalogModelShowcaseNoiseNetwork5
             @display("p=221,132");
         }
 }
+
+network x extends AnalogModelShowcaseNoiseNetwork2
+{}

@@ -557,7 +557,71 @@ The parameter value above describes the following spectrum (displayed on a spect
 
 Note that even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
 
+In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, non-overlapping Wifi channels. A noise source create small bursts of noise periodically, which overlaps with both host pair's transmissions.
+
+The :ned:`noiseSource` module creates dimensional transmissions, which interfere with other signals. It contains a transmitter module (:ned:`NoiseDimensionalTransmitter`), an antenna module (:ned:`IsotropicAntenna` by default), mobility module (so that it has a position, and optinally move around):
+
+.. figure:: media/noisesource.png
+   :width: 25%
+   :align: center
+
+The noise transmissions don't contain any data or modulation, just a center frequency, bandwidth, power, and configurable arbitrary signal shape in frequency and time. It also has duration and sleep interval parameters.
+
+Here is the configuration in omnetpp.ini pertaining to the radio settings (the visualizer settings are omitted):
+
+.. literalinclude:: ../omnetpp.ini
+   :start-at: Config Noise5
+   :end-at: powerSpectralDensity
+   :language: ini
+
+The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. They are put on slightly overlapping Wifi channels. The signal spectrums are configured to be the spectral mask of OFDM transmissions in the 802.11 standard.
+
+.. **TODO** snirMode
+
+.. **TODO** snirMode
+
+In the receiver, reception of frames with SNIR under the SNIR threshold are not attempted.
+The :par:`snirThresholdMode` parameter in the receiver specifies how the SNIR is calculated; it's either ``min`` or ``mean``, i.e. take the minimum or the mean of the SNIR during the course of receiving a frame. Similarly, the :par:`snirMode` parameter in the receiver's ``errorModel`` submodule specifies whether to take into account the ``min`` or ``mean`` of SNIR when calculating reception probability.
+
+.. **TODO** when to use which one?
+
+.. **TODO** include the relevant part from spectrum ?
+
+.. .. include:: ../../coexistence/doc/index.rst
+   :start-after: the reception.
+   :end-before: We set the
+
+.. include:: ../../coexistence/doc/index.rst
+   :start-after: either ``min`` or ``mean``.
+   :end-before: We set the
+
+.. **TODO** why we use mean here ?
+
+We use mean SNIR because the noise bursts are short compared to the hosts' transmissions, and it wouldn't be realistic if the short bursts ruined the longer data frames.
+
+.. **TODO** describe the noise source
+
+  - it creates dimensional transmissions
+  - it has a transmitter, an antenna and a mobility module (so it has position)(or it can move)
+  - the transmissions dont have any data or modulation, just center frequency, bandwidth, and can have arbitrary shape in frequency and time
+  - it interferes with other transmissions
+  - it has a power, duration and sleep interval parameter
+
+.. **TODO** noiseSource
+
+The noise source is configured to create noise transmissions which overlap both host pair's Wifi channels.
+Background noise is specified as power density, instead of power. **TODO** this is important because the transmissions are defined that way as well ?
+
+.. **TODO** background noise
+
 .. INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio.
+
+Here is a video of the simulation. Signals are visualized with colored rings, successful PHY and datalink-layer transmissions are visualized with arrows. The signals are displayed with spectrum figures and spectrograms:
 
 .. video:: media/noise1.mp4
    :width: 100%
+
+.. animation speed none, playback speed 0.25, zoom 3.71, normal run from event 299 to 518
+   hide physical and data link visualizers until around event 334
+
+The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
