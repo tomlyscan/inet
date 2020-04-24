@@ -222,6 +222,9 @@ TODO
 .. video:: media/unitdisk1.mp4
    :width: 80%
 
+.. video:: media/unitdisk2.mp4
+   :width: 80%
+
 **TODO** communication range
 
 .. TODO display just the routes
@@ -358,7 +361,13 @@ Interference from a periodic noise source (Dimensional)
 
 .. The dimensional analog model is the most sophisticated analog signal representation in INET. It can model arbitrary signal shapes in frequency and time. It can also model interference more realistically than the scalar model. /It can model interference even between different technologies (cross-technology interference). It can simulate partially overlapping signals in frequency and time. The spectrums can also be visualized with spectrum figures and spectrograms and power density map...
 
-The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums. It can also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+
+The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time. It can be used to simulate complex signal interactions, i.e. multiple arbitrary signal shapes in frequency and time can overlap to any degree in frequency and time.
+
+The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, as more complex signal interactions can be simulated. but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+
+**TODO** its more accurate because arbitrary interference can be simulated, i.e. multiple arbitrary signals shapes can overlap to various degrees/any degree in frequency and time. -> thus more complex signal interactions
 
 .. the drawback is performance, everything else is a benefit...accuracy
 
@@ -472,12 +481,18 @@ interpolators:
 
 The dimensional transmitters in INET use the API to create transmissions. For example:
 
-- The boxcar function is used to create a signal with a specific bandwidth; it's also used to set the signal's duration in time
+- The 2D boxcar function is used to create a flat signal with a specific bandwidth and duration.
 - The domain shifting function is used to place it on the frequency spectrum, and to the appropriate point in time.
 - Transmission power and attenuation is applied with the multiplication function.
+- Transmission power is applied with the multiplication function.
+- Attenuation is also applied with the multiplication function (it's more complicated, as attenuation is space, time and frequency dependent, and takes obstacles into account).
 - Interfering signals are summed with the addition function.
 - SNIR is calculated by dividing the received signal with interfering signals.
-- Signals with a complex spectrum are constructed from primitives with the partitioning function.
+
+The transmitter in INET uses the most optimal functions to create the signal, depending on the gain parameters. For example,
+if the parameters describe a flat signal, it'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gain parameters describe a complex function, it'll use the generic interpolated function; the parameter string actually maps to the samples and the types of interplation between them.
+
+.. - Signals with a complex spectrum are constructed from primitives with the partitioning function.
 
 INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4, and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form). TODO parameters
 
@@ -535,7 +550,7 @@ The signal shapes in frequency and time can be defined with the :par:`frequencyG
   - a point is specified with a frequency-gain pair
   - interpolation of the spectrum function is specified between points with keywords (such as linear, left, right, etc)
 
-Here is an example signal spectrum:
+Here is an example signal spectrum definition:
 
 .. code-block:: ini
 
@@ -557,7 +572,7 @@ The parameter value above describes the following spectrum (displayed on a spect
 
 Note that even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
 
-In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, non-overlapping Wifi channels. A noise source create small bursts of noise periodically, which overlaps with both host pair's transmissions.
+In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, slightly overlapping Wifi channels. A noise source (:ned:`NoiseSource`) creates small bursts of noise periodically, which overlaps with both host pair's transmissions.
 
 The :ned:`noiseSource` module creates dimensional transmissions, which interfere with other signals. It contains a transmitter module (:ned:`NoiseDimensionalTransmitter`), an antenna module (:ned:`IsotropicAntenna` by default), mobility module (so that it has a position, and optinally move around):
 
@@ -565,12 +580,14 @@ The :ned:`noiseSource` module creates dimensional transmissions, which interfere
    :width: 25%
    :align: center
 
-The noise transmissions don't contain any data or modulation, just a center frequency, bandwidth, power, and configurable arbitrary signal shape in frequency and time. It also has duration and sleep interval parameters.
+The noise transmissions don't have any data or modulation, just a center frequency, bandwidth, power, and configurable arbitrary signal shape in frequency and time. It also has duration and sleep interval parameters.
 
-Here is the configuration in omnetpp.ini pertaining to the radio settings (the visualizer settings are omitted):
+Here is the configuration in omnetpp.ini pertaining to the radio settings:
+
+.. (the visualizer settings are omitted)
 
 .. literalinclude:: ../omnetpp.ini
-   :start-at: Config Noise5
+   :start-after: radio settings
    :end-at: powerSpectralDensity
    :language: ini
 
@@ -581,7 +598,7 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. They are put 
 .. **TODO** snirMode
 
 In the receiver, reception of frames with SNIR under the SNIR threshold are not attempted.
-The :par:`snirThresholdMode` parameter in the receiver specifies how the SNIR is calculated; it's either ``min`` or ``mean``, i.e. take the minimum or the mean of the SNIR during the course of receiving a frame. Similarly, the :par:`snirMode` parameter in the receiver's ``errorModel`` submodule specifies whether to take into account the ``min`` or ``mean`` of SNIR when calculating reception probability.
+The :par:`snirThresholdMode` parameter in the receiver specifies how the SNIR is calculated; it's either ``min`` or ``mean``, i.e. take the minimum or the mean of the SNIR during the course of receiving a frame. Similarly, the :par:`snirMode` parameter in the receiver's ``errorModel`` submodule specifies whether to take into account the ``min`` or ``mean`` of SNIR when calculating reception probability. **TODO** limitations of the current error model -> not sure if its needed
 
 .. **TODO** when to use which one?
 
