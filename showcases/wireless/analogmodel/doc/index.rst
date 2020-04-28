@@ -41,9 +41,15 @@ Goals
     the scalar has frequency data but nothing else
     the dimensional models spectrums accurately
 
-In INET, radio signal analog models represent signals as they are transmitted, received and propagate in the wireless medium. Models of different complexity are available, suitable for different purposes.
+**V1** In INET, radio signal analog models represent signals as they are transmitted, received and propagate in the wireless medium. Models of different complexity are available, suitable for different purposes.
 
-This showcase describes the avaialbe analog signal representation models, their advantages and drawbacks, and typical use cases. There are three example simulations for typical use cases.
+.. The analog model implements how signals as a physical phenomena are represented as they are transmitted, received and propagate in the wireless medium. It specifies at what detail level they are represented, what features of them are modeled.
+
+**V2** In INET, analog models implement how signals as physical phenomena are represented as they are transmitted, received and propagate? through the wireless medium. Analog models of different complexity are available, differing from each other in detail level, and modeled PHY-layer features.
+
+.. This showcase describes the avaialbe analog signal representation models, their advantages and drawbacks, and typical use cases. There are three example simulations for typical use cases. **TODO** emphasize example
+
+This showcase describes the avaialbe analog signal representation models, their advantages and drawbacks, and contains three example simulations for typical use cases.
 
 .. Through three example simulations.
 
@@ -74,16 +80,53 @@ its part of the radio medium module
 The analog signal representation is implemented as a submodule of the radio medium module.
 INET contains the following analog model types, presented in the order of increasing complexity:
 
-- **Unit disk**: Simple model featuring only communication range and interference range as parameters. Reception in communication range is always successful, and outside of it always unsuccessful. Signals can be detected in the interference range, which might cause network nodes to defer from transmitting. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
-- **Scalar**: Signal power is represented by a scalar value. Transmissions have a center frequency and bandwidth. **TODO** attentuation due to distance or other stuff Signal interfere when their center frequency and bandwidth is exactly the same (and the signal power is high enough TODO). When there is no overlap in the frequency spectrum, they don't interfere. Overlapping signals can't be simulated with this model, it throws and error. **TODO** suitable for what
-- **Dimensional**: Signal power is represented as a multidimensional function of frequency and time; arbitrary signal shapes can be defined in time and the frequency spectrum. Attenuation and interference is modeled accurately. Suitable for simulating cross-technology interference (**TODO** see also Coexistence) **TODO** suitable for accurate interference and CTI simulation
+- **Unit disk**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+
+- **Unit disk**: Simple model featuring communication, interference and detection ranges as parameters. Reception in communication range is always successful, and outside of it always unsuccessful. Signals can be detected in the interference range, which might cause network nodes to defer from transmitting. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+
+.. - **Scalar**: Signal power is represented by a scalar value. Transmissions have a center frequency and bandwidth; **TODO** attentuation due to distance or other stuff Signal interfere when their center frequency and bandwidth is exactly the same (and the signal power is high enough TODO). When there is no overlap in the frequency spectrum, they don't interfere. Overlapping signals can't be simulated with this model, it throws and error. **TODO** suitable for what
+
+- **Scalar**: Signal power is represented with a scalar value. Transmissions have a center frequency and bandwidth, but modeled as flat signals in frequency and time. Attenuation is simulated, and a SNIR value for reception can be calculated and used by error models to calculate reception probability. Signals can interfere only when their center frequency and bandwidth is exactly the same. Suitable for simulations where wireless channel, attenuation, SNIR, and error modeling is required/ but the emphasis is not on the details of the wireless PHY layer.
+
+.. Transmissions are modeled as flat signals in frequency and time;
+
+.. Signals with overlapping spectrums can't be simulated with this model.
+
+.. **TODO** suitable for what
+
+- **Dimensional**: Signal power is represented as a multidimensional function of frequency and time; arbitrary signal shapes can be defined in time and the frequency spectrum. Simulates attenuation and SNIR. Suitable for simulating interference of signals with partially overlapping spectrums, and cross-technology interference (**TODO** see also Coexistence).
+
+.. In addition to simulating attenuation and SNIR
+
+.. **TODO** suitable for accurate interference and CTI simulation
+
+.. - **Dimensional**: Signal power is represented as a multidimensional function of frequency and time; arbitrary signal shapes can be defined in time and the frequency spectrum. Interference is modeled accurately. Suitable for simulating cross-technology interference (**TODO** see also Coexistence).
 
 More complex models are more accurate but require more computing performance.
 INET contains a version of radio and radio medium module for each type and technology, e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
 :ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
 **TODO** these models use the appropriate analog signal representation (i.e. the receiver, the transmitter, and the radio medium)
 
-    so
+INET contains a version of radio module for each analog model type and technology, e.g. for 802.11, there is :ned:`Ieee80211UnitDiskRadio`, :ned:`Ieee80211ScalarRadio` and :ned:`Ieee80211DimensionalRadio`. Similarly, other technologies (e.g. 802.15.4, Apsk radio) have the approrpirate versions.
+
+These modules usually have a corresponding radio medium module as well, e.g. :ned:`Ieee80211ScalarRadioMedium`, :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
+
+The corresponding radio and radio medium modules should be used together, but they can just be used with :ned:`RadioMedium` by setting the analog model type to the appropriate one in the radio medium module. The different radio medium module types don't have associated C++ classes, just extend RadioMedium with parameter settings suitable for the given technology.**TODO**
+
+The unit disk model is very simple and it doesn't have technology specific radio medium modules; all unit disk radios can be used with the generic UnitDiskRadioMedium (which is just RadioMedium with the analog model type set to unit disk)
+
+**TODO** these models use the appropriate analog signal representation (i.e. the receiver, the transmitter, and the radio medium)
+
+INET contains versions of technologies with the different analog model types, e.g. e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
+:ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
+
+so
+
+- there are technologies in INET such as Wifi, 802.15.4, apsk radio
+- there are versions of these with different analog models: Ieee80211UnitDiskRadio, Ieee80211ScalarRadio, Ieee80211DimensionalRadio
+- these have corresponding radio medium modules: UnitDiskRadioMedium, Ieee80211ScalarRadioMedium, Ieee80211DimensionalRadioMedium
+
+..     so
 
     - signal power is represented as a function of frequency and time
     - arbitrary signal shape can be defined in frequency and time
@@ -98,8 +141,8 @@ INET contains a version of radio and radio medium module for each type and techn
 
     There are several
 
-Testing routing protocols (Unit disk)
--------------------------------------
+Unit Disk Example: Testing routing protocols
+--------------------------------------------
 
     - this example is about the unit disk
     - why is this good for routing?
@@ -214,9 +257,9 @@ Here is the configuration in omnetpp.ini:
 
 Here is a video of the simulation running (successful ping message sends between the source and destination hosts are indicated with colored arrows; routes to destination are indicated with black arrows):
 
-TODO
+.. TODO
 
-.. video:: media/Aodv5_s.mp4
+.. .. video:: media/Aodv5_s.mp4
    :width: 80%
 
 .. video:: media/unitdisk1.mp4
@@ -225,7 +268,7 @@ TODO
 .. video:: media/unitdisk2.mp4
    :width: 80%
 
-**TODO** communication range
+.. **TODO** communication range
 
 .. TODO display just the routes
 
@@ -237,8 +280,12 @@ The source and destination hosts are connected intermittently. If the intermedia
 
    - this should be in the intro part of this section ?
 
-Number of received packets vs distance (Scalar)
------------------------------------------------
+**TODO** what are the drawbacks/benefits ?
+
+Scalar Example: SNIR and Packet Error Rate vs Distance
+------------------------------------------------------
+
+**TODO** Throughput/SNIR vs Distance
 
   - this example is about the scalar
   - **why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels**
@@ -349,8 +396,8 @@ Here is a video of the simulation (successful link-layer transmissions are indic
 As the distance increases between the two hosts, the packet error rate and the SNIR increase, and packets are dropped.
 Note that the communication range of the source host is indicated with a blue circle. Beyond the circle, transmissions cannot be received correctly, and as an optimization, the radio medium module doesn't send them to the destination host, thus there are no packet drop animations.
 
-Interference from a periodic noise source (Dimensional)
--------------------------------------------------------
+Dimensional Example: Interference from a Periodic Noise Source
+--------------------------------------------------------------
 
 .. - this example is about dimensional
   - why is it good for this purpose? cos need to model the spectrums accurately. there are two channels which overlap, the noise generator has a different spectrum, and short transmissions which might not be enough in time to corrupt the wifi nodes' transmissions
@@ -361,13 +408,21 @@ Interference from a periodic noise source (Dimensional)
 
 .. The dimensional analog model is the most sophisticated analog signal representation in INET. It can model arbitrary signal shapes in frequency and time. It can also model interference more realistically than the scalar model. /It can model interference even between different technologies (cross-technology interference). It can simulate partially overlapping signals in frequency and time. The spectrums can also be visualized with spectrum figures and spectrograms and power density map...
 
-The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+.. **V1** The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
 
-The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time. It can be used to simulate complex signal interactions, i.e. multiple arbitrary signal shapes in frequency and time can overlap to any degree in frequency and time.
+.. **V2** The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time. It can be used to simulate complex signal interactions, i.e. multiple arbitrary signal shapes in frequency and time can overlap to any degree in frequency and time.
 
-The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, as more complex signal interactions can be simulated. but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can:
 
-**TODO** its more accurate because arbitrary interference can be simulated, i.e. multiple arbitrary signals shapes can overlap to various degrees/any degree in frequency and time. -> thus more complex signal interactions
+- Model arbitrary signal shapes in frequency and time
+- Simulate complex signal interactions, i.e. multiple arbitrary signal shapes in frequency and time can overlap to any degree in frequency and time
+- Simulate interference of different wireless technologies (cross-technology interference)
+
+It is the most accurate analog signal representation, but its performance is comparable to that of the scalar model. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+
+.. **V4** The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, as more complex signal interactions can be simulated. but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+
+.. **TODO** its more accurate because arbitrary interference can be simulated, i.e. multiple arbitrary signals shapes can overlap to various degrees/any degree in frequency and time. -> thus more complex signal interactions
 
 .. the drawback is performance, everything else is a benefit...accuracy
 
@@ -424,38 +479,38 @@ The dimensional analog model represents signal power as a multi-dimensional func
   The Ieee80211DimensionalTransmitter in INET uses this API to create transmissions.
   And the thing in the ini file is just syntactic salt
 
---------
+.. --------
 
 The multi-dimensional analog model uses an efficient generic purpose multi-dimensional mathematical function API. The analog model represents signal spectral power density [W/Hz] as a multi-dimensional function of time [s] and frequency [Hz].
 
 The API provides primitive functions (e.g. constant function), function compositions (e.g. function addition), and allows creating new functions either by implementing the required C++ interface or by combining existing implementations.
 Here are some example functions provided by the API:
 
-primitive functions:
+Primitive functions:
 
-- multi-dimensional constant function
-- multi-dimensional unilinear function, linear in 1 dimension, constant in the others
-- multi-dimensional bilinear function, linear in 2 dimensions, constant in the others
-- multi-dimensional unireciprocal function, reciprocal in 1 dimension, constant in the others
-- boxcar function in 1D and 2D, being non-zero in a specific range and zero everywhere else
-- standard gauss function in 1D
-- sawtooth function in 1D that allows creating chirp signals
-- interpolated function with samples on a grid in 1D and 2D
-- generic interpolated function with arbitrary samples and interpolations between them
+- Multi-dimensional constant function
+- Multi-dimensional unilinear function, linear in 1 dimension, constant in the others
+- Multi-dimensional bilinear function, linear in 2 dimensions, constant in the others
+- Multi-dimensional unireciprocal function, reciprocal in 1 dimension, constant in the others
+- Boxcar function in 1D and 2D, being non-zero in a specific range and zero everywhere else
+- Standard gauss function in 1D
+- Sawtooth function in 1D that allows creating chirp signals
+- Interpolated function with samples on a grid in 1D and 2D
+- Generic interpolated function with arbitrary samples and interpolations between them
 
-function compositions:
+Function compositions:
 
-- algebraic operations: addition, subtraction, multiplication, division
-- limiting function domain, shifting function domain, modulating function domain
-- combination of two 1D functions into a 2D function
-- approximation in selected dimension
-- integration in selected dimension
+- Algebraic operations: addition, subtraction, multiplication, division
+- Limiting function domain, shifting function domain, modulating function domain
+- Combination of two 1D functions into a 2D function
+- Approximation in selected dimension
+- Integration in selected dimension
 
-interpolators:
+Interpolators:
 
-- left/right/closer (between two points, use the value of the left/right point, or closer?)
-- min/max/average
-- linear
+- Left/right/closer (between two points, use the value of the left/right point, or use the left value until the middle of the interval, and the right value after that)
+- Min/max/average
+- Linear
 
 .. **V1** The API is used by dimensional transmitters and receivers. Here are some examples:
 
@@ -490,13 +545,13 @@ The dimensional transmitters in INET use the API to create transmissions. For ex
 - SNIR is calculated by dividing the received signal with interfering signals.
 
 The transmitter in INET uses the most optimal functions to create the signal, depending on the gain parameters. For example,
-if the parameters describe a flat signal, it'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gain parameters describe a complex function, it'll use the generic interpolated function; the parameter string actually maps to the samples and the types of interplation between them.
+if the parameters describe a flat signal, it'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gain parameters describe a complex function, it'll use the generic interpolated function; the gain parameter string actually maps to the samples and the types of interplation between them. **TODO**
 
 .. - Signals with a complex spectrum are constructed from primitives with the partitioning function.
 
 INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4, and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form). TODO parameters
 
---------
+.. --------
 
   this is good because its nearly has the same performance as the scalar
   but it is more complex, there is composition
@@ -542,14 +597,13 @@ INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideb
 
   INET contains dimensional versions of IEEE 802.11 and 802.15.4, and Apsk radio, and the corresponding radio medium modules.
 
-The signal shapes in frequency and time can be defined with the :par:`frequencyGains` and :par:`timeGains` parameters of transmitter modules.
-
 .. For example, signal shapes in frequency can be defined as follows:
 
 .. - the spectrum is specified as points in the frequency-power graph
   - a point is specified with a frequency-gain pair
   - interpolation of the spectrum function is specified between points with keywords (such as linear, left, right, etc)
 
+The signal shapes in frequency and time can be defined with the :par:`frequencyGains` and :par:`timeGains` parameters of transmitter modules.
 Here is an example signal spectrum definition:
 
 .. code-block:: ini
