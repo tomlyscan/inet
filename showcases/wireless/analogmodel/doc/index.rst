@@ -94,7 +94,7 @@ INET contains the following analog model types, presented in the order of increa
 
 .. **TODO** suitable for what
 
-- **Dimensional**: Signal power is represented as a multidimensional function of frequency and time; arbitrary signal shapes can be defined in time and the frequency spectrum. Simulates attenuation and SNIR. Suitable for simulating interference of signals with partially overlapping spectrums, and cross-technology interference (**TODO** see also Coexistence).
+- **Dimensional**: Signal power is represented as a multidimensional function of frequency and time; arbitrary signal shapes can be defined in time and the frequency spectrum. Simulates attenuation and SNIR. Suitable for simulating interference of signals with partially overlapping spectrums, and cross-technology interference (see also :doc:`/showcases/wireless/coexistence/doc/index`).
 
 .. In addition to simulating attenuation and SNIR
 
@@ -111,7 +111,7 @@ These models use the appropriate analog signal representation (i.e. in the recei
 
 These modules usually have a corresponding radio medium module as well, e.g. :ned:`Ieee80211ScalarRadioMedium`, :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc (an exception being the unit disk radios, all of which use :ned:`UnitDiskRadioMedium`).
 
-  The corresponding radio and radio medium modules should be used together, but they can just be used with :ned:`RadioMedium` by setting the analog model type to the appropriate one in the radio medium module. The different radio medium module types don't have associated C++ classes, just extend RadioMedium with parameter settings suitable for the given technology.**TODO** not sure its needed
+.. The corresponding radio and radio medium modules should be used together, but they can just be used with :ned:`RadioMedium` by setting the analog model type to the appropriate one in the radio medium module. The different radio medium module types don't have associated C++ classes, just extend RadioMedium with parameter settings suitable for the given technology.**TODO** not sure its needed
 
 .. The unit disk model is very simple and it doesn't have technology specific radio medium modules; all unit disk radios can be used with the generic UnitDiskRadioMedium (which is just RadioMedium with the analog model type set to unit disk)
 
@@ -211,7 +211,13 @@ The unit disk analog model is suitable for wireless simulations in which the det
     use it with a mac
   - and there is the Wifi version
 
-- **TODO** its simple and runs fast; suitable for scenarios where the details of tranmissisons don't matter/the emphasis is not on that, for example, routing
+.. - **TODO** its simple and runs fast; suitable for scenarios where the details of tranmissisons don't matter/the emphasis is not on that, for example, routing
+
+**V1** The unit disk model is simple and fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+
+**V2** The unit disk model is simple and fast. The drawback is that it's not very realistic, but it is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+
+**V3** The unit disk model uses a simple physical layer abstraction and it's fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
 
 .. - there are actually, there are radios, which contain the transmitters and receivers
    and there is the radio medium...need to use compatible...some examples
@@ -280,7 +286,7 @@ The source and destination hosts are connected intermittently. If the intermedia
 
    - this should be in the intro part of this section ?
 
-**TODO** what are the drawbacks/benefits ?
+.. **TODO** what are the drawbacks/benefits ?
 
 Scalar Example: SNIR and Packet Error Rate vs Distance
 ------------------------------------------------------
@@ -363,9 +369,12 @@ In the scalar model, signals are represented with a boxcar shape in frequency an
 INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
 
 Radios using the scalar analog representation also model features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
-**TODO** also set centerfrequency bandwidth with parameters
+(With :ned:`ApskScalarRadio`, the center frequency and bandwidth parameters are also set manually).
 
+.. **TODO** also set centerfrequency bandwidth with parameters
 
+The scalar model is more realistic than unit disk, but also requires more computing power. Although it can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all, it can be used for simulating multiple nodes on the same wifi channel, channel access, contention, etc.
+It can also be used when power level, attenuation, path and obstacle loss, snir, and realistic error modeling is needed.
 
 ..  so
 
@@ -432,7 +441,7 @@ The dimensional analog model represents signal power as a multi-dimensional func
 - Simulate complex signal interactions, i.e. multiple arbitrary signal shapes in frequency and time can overlap to any degree in frequency and time
 - Simulate interference of different wireless technologies (cross-technology interference)
 
-It is the most accurate analog signal representation, but its performance is comparable to that of the scalar model. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
+It is the most accurate analog signal representation, but its performance is comparable to that of the scalar model. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
 
 .. **V4** The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, as more complex signal interactions can be simulated. but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
 
@@ -558,12 +567,17 @@ The dimensional transmitters in INET use the API to create transmissions. For ex
 - Interfering signals are summed with the addition function.
 - SNIR is calculated by dividing the received signal with interfering signals.
 
-The transmitter in INET uses the most optimal functions to create the signal, depending on the gain parameters. For example,
-if the parameters describe a flat signal, it'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gain parameters describe a complex function, it'll use the generic interpolated function; the gain parameter string actually maps to the samples and the types of interplation between them. **TODO**
+.. note:: The dimensional transmitters in INET use the most optimal functions to create the signal, depending on the gains parameters (described later). For example, if the parameters describe a flat signal, they'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gains parameters describe a complex function, they'll use the generic interpolated function; the gains parameter string actually maps to the samples and the types of interplation between them.
+
+.. **TODO**
 
 .. - Signals with a complex spectrum are constructed from primitives with the partitioning function.
 
-INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4, and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form). TODO parameters
+INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4, and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form).
+
+.. TODO parameters
+
+The transmitters have parameters to set the power, center frequency, bandwidth, modulation, preamble duration, header length and bitrate (these should be specified in apskradio; in 802.11, the power, op mode and channel number should be specified, the others are set automatically by the mac).
 
 .. --------
 
@@ -602,6 +616,13 @@ INET contains the dimensional version of IEEE 802.11, narrowband and ultra-wideb
     - types
 
 **TODO** normalization parameters
+
+The :par:`timeGainsNormalization` and :par:`frequencyGainsNormalization` parameters set the normalization.
+The normalization parameters specify whether to normalize the signal function to 1. Normalization parameters:
+
+- No normalization (""): no normalization
+- Integral: the area below the signal function equals to 1; this is multiplied by the transmission power
+- Maximum: the maximum of the signal function equals to 1; this is multiplied by the transmission power
 
 .. The signal shapes can be configured using the :par:`timeGains` and :par:`frequencyGains` parameters of dimensional transmitters.
 
@@ -666,7 +687,9 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. They are put 
 .. **TODO** snirMode
 
 In the receiver, reception of frames with SNIR under the SNIR threshold are not attempted.
-The :par:`snirThresholdMode` parameter in the receiver specifies how the SNIR is calculated; it's either ``min`` or ``mean``, i.e. take the minimum or the mean of the SNIR during the course of receiving a frame. Similarly, the :par:`snirMode` parameter in the receiver's ``errorModel`` submodule specifies whether to take into account the ``min`` or ``mean`` of SNIR when calculating reception probability. **TODO** limitations of the current error model -> not sure if its needed
+The :par:`snirThresholdMode` parameter in the receiver specifies how the SNIR is calculated; it's either ``min`` or ``mean``, i.e. take the minimum or the mean of the SNIR during the course of receiving a frame. Similarly, the :par:`snirMode` parameter in the receiver's ``errorModel`` submodule specifies whether to take into account the ``min`` or ``mean`` of SNIR when calculating reception probability.
+
+**TODO** limitations of the current error model -> not sure if its needed
 
 .. **TODO** when to use which one?
 
@@ -695,7 +718,9 @@ We use mean SNIR because the noise bursts are short compared to the hosts' trans
 .. **TODO** noiseSource
 
 The noise source is configured to create noise transmissions which overlap both host pair's Wifi channels.
-Background noise is specified as power density, instead of power. **TODO** this is important because the transmissions are defined that way as well ?
+Background noise is specified as power density, instead of power.
+
+.. **TODO** this is important because the transmissions are defined that way as well ?
 
 .. **TODO** background noise
 
