@@ -61,11 +61,11 @@ This showcase describes the avaialbe analog signal representation models, their 
 About Analog Models
 -------------------
 
-more details about analog models, performance/accuracy
-what kinds are available
-its part of the radio medium module
+.. more details about analog models, performance/accuracy
+   what kinds are available
+   its part of the radio medium module
 
-    so
+so
 
     the analog model
 
@@ -80,9 +80,9 @@ its part of the radio medium module
 The analog signal representation is implemented as a submodule of the radio medium module.
 INET contains the following analog model types, presented in the order of increasing complexity:
 
-- **Unit disk**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+- **Unit disk V1**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
 
-- **Unit disk**: Simple model featuring communication, interference and detection ranges as parameters. Reception in communication range is always successful, and outside of it always unsuccessful. Signals can be detected in the interference range, which might cause network nodes to defer from transmitting. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+- **Unit disk V2**: Simple model featuring communication, interference and detection ranges as parameters. Reception in communication range is always successful, and outside of it always unsuccessful. Signals can be detected in the interference range, which might cause network nodes to defer from transmitting. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
 
 .. - **Scalar**: Signal power is represented by a scalar value. Transmissions have a center frequency and bandwidth; **TODO** attentuation due to distance or other stuff Signal interfere when their center frequency and bandwidth is exactly the same (and the signal power is high enough TODO). When there is no overlap in the frequency spectrum, they don't interfere. Overlapping signals can't be simulated with this model, it throws and error. **TODO** suitable for what
 
@@ -102,29 +102,29 @@ INET contains the following analog model types, presented in the order of increa
 
 .. - **Dimensional**: Signal power is represented as a multidimensional function of frequency and time; arbitrary signal shapes can be defined in time and the frequency spectrum. Interference is modeled accurately. Suitable for simulating cross-technology interference (**TODO** see also Coexistence).
 
-More complex models are more accurate but require more computing performance.
+**V1** More complex models are more accurate but require more computing performance.
 INET contains a version of radio and radio medium module for each type and technology, e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
 :ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
-**TODO** these models use the appropriate analog signal representation (i.e. the receiver, the transmitter, and the radio medium)
+These models use the appropriate analog signal representation (i.e. in the receiver, the transmitter, and the radio medium)
 
-INET contains a version of radio module for each analog model type and technology, e.g. for 802.11, there is :ned:`Ieee80211UnitDiskRadio`, :ned:`Ieee80211ScalarRadio` and :ned:`Ieee80211DimensionalRadio`. Similarly, other technologies (e.g. 802.15.4, Apsk radio) have the approrpirate versions.
+**V2** INET contains a version of radio module for each analog model type and technology, e.g. for 802.11, there is :ned:`Ieee80211UnitDiskRadio`, :ned:`Ieee80211ScalarRadio` and :ned:`Ieee80211DimensionalRadio`. Similarly, other technologies (e.g. 802.15.4, Apsk radio) have the approrpirate versions.
 
-These modules usually have a corresponding radio medium module as well, e.g. :ned:`Ieee80211ScalarRadioMedium`, :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
+These modules usually have a corresponding radio medium module as well, e.g. :ned:`Ieee80211ScalarRadioMedium`, :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc (an exception being the unit disk radios, all of which use :ned:`UnitDiskRadioMedium`).
 
-The corresponding radio and radio medium modules should be used together, but they can just be used with :ned:`RadioMedium` by setting the analog model type to the appropriate one in the radio medium module. The different radio medium module types don't have associated C++ classes, just extend RadioMedium with parameter settings suitable for the given technology.**TODO**
+  The corresponding radio and radio medium modules should be used together, but they can just be used with :ned:`RadioMedium` by setting the analog model type to the appropriate one in the radio medium module. The different radio medium module types don't have associated C++ classes, just extend RadioMedium with parameter settings suitable for the given technology.**TODO** not sure its needed
 
-The unit disk model is very simple and it doesn't have technology specific radio medium modules; all unit disk radios can be used with the generic UnitDiskRadioMedium (which is just RadioMedium with the analog model type set to unit disk)
+.. The unit disk model is very simple and it doesn't have technology specific radio medium modules; all unit disk radios can be used with the generic UnitDiskRadioMedium (which is just RadioMedium with the analog model type set to unit disk)
 
-**TODO** these models use the appropriate analog signal representation (i.e. the receiver, the transmitter, and the radio medium)
+.. **TODO** these models use the appropriate analog signal representation (i.e. the receiver, the transmitter, and the radio medium)
 
-INET contains versions of technologies with the different analog model types, e.g. e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
-:ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
+.. INET contains versions of technologies with the different analog model types, e.g. e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
+   :ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
 
-so
+.. so
 
-- there are technologies in INET such as Wifi, 802.15.4, apsk radio
-- there are versions of these with different analog models: Ieee80211UnitDiskRadio, Ieee80211ScalarRadio, Ieee80211DimensionalRadio
-- these have corresponding radio medium modules: UnitDiskRadioMedium, Ieee80211ScalarRadioMedium, Ieee80211DimensionalRadioMedium
+  - there are technologies in INET such as Wifi, 802.15.4, apsk radio
+  - there are versions of these with different analog models: Ieee80211UnitDiskRadio, Ieee80211ScalarRadio, Ieee80211DimensionalRadio
+  - these have corresponding radio medium modules: UnitDiskRadioMedium, Ieee80211ScalarRadioMedium, Ieee80211DimensionalRadioMedium
 
 ..     so
 
@@ -144,7 +144,7 @@ so
 Unit Disk Example: Testing routing protocols
 --------------------------------------------
 
-    - this example is about the unit disk
+..    - this example is about the unit disk
     - why is this good for routing?
     - what are the drawbacks/benefits
     - what are the parameters and the available models
@@ -191,7 +191,7 @@ The unit disk analog model is suitable for wireless simulations in which the det
 - :ned:`UnitDiskRadio`: generic radio using the unit disk analog model; contains :ned:`UnitDiskTransmitter` and :ned:`UnitDiskReceiver`
 - :ned:`Ieee80211UnitDiskRadio`: unit disk version of Wifi; contains :ned:`Ieee80211UnitDiskTransmitter` and :ned:`Ieee80211UnitDiskReceiver`
 
-**TODO** mention AckingInterface ?
+.. **TODO** mention AckingInterface ?
 
 ..  so
 
@@ -211,7 +211,7 @@ The unit disk analog model is suitable for wireless simulations in which the det
     use it with a mac
   - and there is the Wifi version
 
-- its simple and runs fast; suitable for scenarios where the details of tranmissisons don't matter/the emphasis is not on that, for example, routing
+- **TODO** its simple and runs fast; suitable for scenarios where the details of tranmissisons don't matter/the emphasis is not on that, for example, routing
 
 .. - there are actually, there are radios, which contain the transmitters and receivers
    and there is the radio medium...need to use compatible...some examples
@@ -224,7 +224,7 @@ The unit disk analog model is suitable for wireless simulations in which the det
   - Interference range: transmissions can't be received successfully, but they can ruin other receptions
   - Detection range: transmission can't interfere with other transmissions, but can cause network nodes detecting them to defer from transmitting (when using a suitable MAC module, such as CsmaCaMac or Ieee80211Mac)
 
-**TODO** need to use the appropriate radio medium, and radio modules (which have the correct transmitter and receiver types) -> not here
+.. **TODO** need to use the appropriate radio medium, and radio modules (which have the correct transmitter and receiver types) -> not here
 
 We'll demonstrate the unit disk analog model in an example scenario featuring mobile adhoc hosts, which use the AODV protocol to maintain routes:
 
@@ -285,7 +285,9 @@ The source and destination hosts are connected intermittently. If the intermedia
 Scalar Example: SNIR and Packet Error Rate vs Distance
 ------------------------------------------------------
 
-**TODO** Throughput/SNIR vs Distance
+.. **TODO** Throughput/SNIR vs Distance
+
+x
 
   - this example is about the scalar
   - **why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels**
@@ -335,10 +337,22 @@ Scalar Example: SNIR and Packet Error Rate vs Distance
 
 .. The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
 
-**V3** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth,
-and models protocol features such as preamble duration, head length, bitrate and modulation. It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
+.. **V3** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
+  Scalar radios model protocol features such as preamble duration, head length, bitrate and modulation. It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation. **TODO** the analog model dont model protocol features but the radios using it
 
-Signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+**V4** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
+It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
+
+**V5** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
+It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception; the SNIR can be used be error models to calculate bit error rate and apcket error rate of receptions.
+
+.. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
+
+.. Scalar radios model protocol features such as preamble duration, head length, bitrate and modulation.
+
+.. **TODO** the analog model dont model protocol features but the radios using it
+
+In the scalar model, signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmisssions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
 
 .. **V3/2** Signals are represented with a boxcar shape in frequency and time. When simulating interference/concurrent transmissions, signals can either completely overlap (same center frequency and bandwidth; signals interfere), or not overlap at all (no interference). The model cant simulate partially overlapping spectrums (results in an error) or realistic signal shapes in frequency and time.
 
@@ -348,7 +362,7 @@ Signals are represented with a boxcar shape in frequency and time. The model can
 
 INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
 
-The scalar analog representation also models features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
+Radios using the scalar analog representation also model features of protocols such as preamble duration, head length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
 **TODO** also set centerfrequency bandwidth with parameters
 
 
