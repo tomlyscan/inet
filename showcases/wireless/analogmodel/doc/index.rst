@@ -65,7 +65,7 @@ About Analog Models
    what kinds are available
    its part of the radio medium module
 
-so
+.. so
 
     the analog model
 
@@ -213,7 +213,7 @@ The unit disk analog model is suitable for wireless simulations in which the det
 
 .. - **TODO** its simple and runs fast; suitable for scenarios where the details of tranmissisons don't matter/the emphasis is not on that, for example, routing
 
-**V1** The unit disk model is simple and fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+.. **V1** The unit disk model is simple and fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
 
 **V2** The unit disk model is simple and fast. The drawback is that it's not very realistic, but it is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
 
@@ -293,7 +293,7 @@ Scalar Example: SNIR and Packet Error Rate vs Distance
 
 .. **TODO** Throughput/SNIR vs Distance
 
-x
+.. x
 
   - this example is about the scalar
   - **why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels**
@@ -397,6 +397,8 @@ It can also be used when power level, attenuation, path and obstacle loss, snir,
 .. In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The hosts have a distance...
 
 In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The source host is stationary, the destination host moves away from the source host. As the distance increases between them, the SNIR and packet error rate increase, so as the number of successfully received transmissions.
+
+**TODO** why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels
 
 .. TODO this should be a study...no need for any video just a chart...received packets vs distance/SNIR vs distance?
 
