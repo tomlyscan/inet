@@ -65,7 +65,7 @@ About Analog Models
    what kinds are available
    its part of the radio medium module
 
-so
+.. so
 
     the analog model
 
@@ -85,11 +85,54 @@ INET contains the following analog model types, presented in the order of increa
   Analog model: applies attenuation and obstacle loss
   Rx: megkapja a fizikai reprezentaciot es a snirt
 
-- **Unit disk V1**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+so
 
-not on the details of attenuation or relative power of signals
+- the analog signal representation is a model of the signal as a physical phenomenon
+- three such models are available
+- several modules take part in implementing the model
+- the transmitter creates a signal at the location of transmission at the time of transmission, which is analog description of the signal
+- the propagation submodule of radio medium shift this signal in time and space to the location of the receiver
+- the analog model submodule of the radio medium applies attenuation (optionally in a space, time and frequency dependent way) and the effects of obstacles/obstacle loss -> actually thats applied by the obstacle loss submodule
+- the receiver gets a physical representation of the signal and the calculated SNIR
+- these submodules do their thing according to the analog representation they are modeling
 
-- **Unit disk V2**: Simple model featuring communication, interference and detection ranges as parameters. Reception outside of it always unsuccessful. Signals can't be detected outside of the interference range, which might cause network nodes to defer from transmitting. Suitable for simulations where the emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+so the analog signal representation is a model, and it is implemented by these modules
+
+The analog signal representation is a model of the signal as a physical phenomenon. Several modules take part in implementing it. Several modules take part in impleneting the transmission, propagation and reception, according to the type of analog signal representation they implement.
+
+The analog signal representation is a model of the signal as a physical phenomenon. Several modules take part in simulating the transmission, propagation and reception of signals, according to the chosen/a particular/using an analog signal representation model. There are actually distinct types of transmitter receiver and radio medium modules, using different analog signal representation models.
+
+The tranmission, propagation and reception process is as follows:
+
+.. - The transmitter module creates an analog description of the signal at the location of the transmission, at the time of transmission.
+  - The propagation submodule of the radio medium module shifts this signal in time and space to the location of the receiver and to the time of reception.
+  - The analog model submodule of the radio medium module applies attenuation (optionally/sometimes/potentially in a space, time and frequency dependent way).
+  - The obstacle loss submodule of the radio medium module applies the effects of obstacles to the signal.
+  - The receiver module gets a physical representation of the signal and the calculated SNIR/from the radio medium module.
+
+  ----
+
+- The transmitter module creates an analog description of the signal at the location and time of the transmission
+- The propagation submodule of the radio medium module shifts this signal in time and space to the location and time of reception.
+- The analog model submodule of the radio medium module applies attenuation (potentially in a space, time and frequency dependent way).
+- The obstacle loss submodule of the radio medium module applies the effects of obstacles to the signal.
+- The receiver module gets a physical representation of the signal and the calculated SNIR from the radio medium module.
+
+There are actually distinct types of transmitter receiver and radio medium modules, using different analog signal representation models.
+
+.. ----
+
+INET contains the following analog model types, presented in the order of increasing complexity:
+
+- **Unit disk V1**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the relative power of signals, e.g. testing routing protocols.
+
+.. emphasis is not on the details of radio transmissions, but something else, e.g. testing routing protocols.
+
+.. not on the details of attenuation or relative power of signals
+
+- **Unit disk V2**: Simple model featuring communication, interference and detection ranges as parameters. Reception outside the communication range is always unsuccessful. Signals can't cause interference outside the interference range, and can't be detected outside of detection range. Suitable for simulations where the emphasis is not on the relative power of signals, e.g. testing routing protocols.
+
+.. which might cause network nodes to defer from transmitting.
 
   negativ allitasok...hol nem lehet venni/detektalni
 
@@ -97,7 +140,11 @@ not on the details of attenuation or relative power of signals
 
 .. - **Scalar**: Signal power is represented by a scalar value. Transmissions have a center frequency and bandwidth; **TODO** attentuation due to distance or other stuff Signal interfere when their center frequency and bandwidth is exactly the same (and the signal power is high enough TODO). When there is no overlap in the frequency spectrum, they don't interfere. Overlapping signals can't be simulated with this model, it throws and error. **TODO** suitable for what
 
-- **Scalar**: Signal power is represented with a scalar value. Transmissions have a center frequency and bandwidth, but modeled as flat signals in frequency and time. Numeric/More realistic attenuation is simulated, and a SNIR value for reception is calculated and used by error models to calculate reception probability. This model can only be used when their center frequency and bandwidth of interfering signals is exactly the same. Suitable for simulations where wireless channel, attenuation, SNIR, and error modeling is required but nem okoz hátrányt hogy flat spectrum van csak.
+- **Scalar**: Signal power is represented with a scalar value. Transmissions have a center frequency and bandwidth, but modeled as flat signals in frequency and time. Numerically calculated/More realistic attenuation is simulated, and a SNIR value for reception is calculated and used by error models to calculate reception probability. This model can only be used when their center frequency and bandwidth of interfering signals is exactly the same. Suitable for simulations where attenuation, SNIR, and error modeling is required but the flat signal is adequate.
+
+.. Signal power and attenuation are numerically calculated
+
+.. nem okoz hátrányt hogy flat spectrum van csak.
 
   more specifically what details -> the signal in frequency is not important
 
@@ -112,9 +159,11 @@ not on the details of attenuation or relative power of signals
 
 .. **TODO** suitable for what
 
-- **Dimensional**: Signal power density is represented as a 2-dimensional function of frequency and time; arbitrary signal shapes can be defined. Simulates time and frequency dependent attenuation and SNIR. Suitable for simulating interference of signals with partially overlapping spectrums, and cross-technology interference (see also :doc:`/showcases/wireless/coexistence/doc/index`). with complex spectral and temporal
+- **Dimensional**: Signal power density is represented as a 2-dimensional function of frequency and time; arbitrary signal shapes can be defined. Simulates time and frequency dependent attenuation and SNIR. Suitable for simulating interference of signals with complex spectral and temporal characteristics, and cross-technology interference (see also :doc:`/showcases/wireless/coexistence/doc/index`).
 
-Suitable for simulating signals with complex spectral and temporal... -> valami ilyesmi
+.. with complex spectral and temporal
+
+.. Suitable for simulating signals with complex spectral and temporal... -> valami ilyesmi
 .. In addition to simulating attenuation and SNIR
 
 .. **TODO** suitable for accurate interference and CTI simulation
@@ -130,9 +179,9 @@ INET contains a version of radio and radio medium module for each type and techn
 :ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
 These models use the appropriate analog signal representation (i.e. in the receiver, the transmitter, and the radio medium)
 
-**V2** INET contains a version of radio module for each analog model type and technology, e.g. for 802.11, there is :ned:`Ieee80211UnitDiskRadio`, :ned:`Ieee80211ScalarRadio` and :ned:`Ieee80211DimensionalRadio`. Similarly, other technologies (e.g. 802.15.4, Apsk radio) have the approrpirate versions.
+.. **V2** INET contains a version of radio module for each analog model type and technology, e.g. for 802.11, there is :ned:`Ieee80211UnitDiskRadio`, :ned:`Ieee80211ScalarRadio` and :ned:`Ieee80211DimensionalRadio`. Similarly, other technologies (e.g. 802.15.4, Apsk radio) have the approrpirate versions.
 
-These modules usually have a corresponding radio medium module as well, e.g. :ned:`Ieee80211ScalarRadioMedium`, :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc (an exception being the unit disk radios, all of which use :ned:`UnitDiskRadioMedium`).
+  These modules usually have a corresponding radio medium module as well, e.g. :ned:`Ieee80211ScalarRadioMedium`, :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc (an exception being the unit disk radios, all of which use :ned:`UnitDiskRadioMedium`).
 
 .. The corresponding radio and radio medium modules should be used together, but they can just be used with :ned:`RadioMedium` by setting the analog model type to the appropriate one in the radio medium module. The different radio medium module types don't have associated C++ classes, just extend RadioMedium with parameter settings suitable for the given technology.**TODO** not sure its needed
 
@@ -185,23 +234,39 @@ The unit disk analog model is the simplest available in INET. It models three ra
 
 ..  of unit disk transmitters
 
-the whole thing in negative
+.. the whole thing in negative
 
-- **Communication range**: tranmissions are always successful within this range unless ruined by another interfering signal
-- **Interference range**: transmissions can't be received successfully in this range, but they can prevent/cause collisions with other receptions
-- **Detection range**: transmission can't interfere with other transmissions in this range, but they can cause network nodes detecting them to defer from transmitting (when using a suitable MAC module, such as :ned:`CsmaCaMac` or :ned:`Ieee80211Mac`)
+- **Communication range**: tranmissions are always unsuccessful outside this range
+- **Interference range**: transmissions can't interfere with and prevent other receptions outside this range
+- **Detection range**: transmissions can't be detected outside this range; inside this range, transmissions might cause network nodes detecting them to defer from transmitting (when using a suitable MAC module, such as :ned:`CsmaCaMac` or :ned:`Ieee80211Mac`)
 
-These ranges can be set in the unit disk transmitters (:par:`communicationRange`, :par:`interferenceRange`, :par:`detectionRange` parameters).
-Furthermore, for example, in the apskradio, **TODO** the unit disk transmitters may still model some protocol features, configurable by parameters, such as :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration.
+.. (and can't cause other nodes to potentially defer from transmitting).
 
-  attol meg hogy unit disk, lehetnek ilyen meta infok a signalon
+.. transmission can't interfere with other transmissions in this range, but they can cause network nodes detecting them to defer from transmitting (when using a suitable MAC module, such as :ned:`CsmaCaMac` or :ned:`Ieee80211Mac`)
 
-**TODO** packet level/bit level/symbol level simulation -> fuggetlen az analog reprezentaciotol
-a metainfok is fuggetlenek tole
+.. These ranges can be set in the unit disk transmitters (:par:`communicationRange`, :par:`interferenceRange`, :par:`detectionRange` parameters).
+  Furthermore, for example, in the apskradio, **TODO** the unit disk transmitters may still model some protocol features, configurable by parameters, such as :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration.
 
-az alaog model megvalasztasa csomo dolgok szabadon hagy...
+.. Furthermode, the signals might carry protocol related meta-information, configurable by parameters, such as :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration.
 
-lehet olyan h a unit disk wifi nem tudja venni emrt a modulatio nem jo
+Furthermode, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic UnitDiskRadio, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration; in the case of Ieee80211UnitDiskRadio, the opMode and channelNumber are configurable./for example
+
+..  -> actually, the ieee80211unitdiskradio extends ieee80211radio, so it has all the parameters of that
+
+..  attol meg hogy unit disk, lehetnek ilyen meta infok a signalon
+
+Note that the simulated level of detail, i.e. packet, bit, or symbol-level, is independent of the used analog model representation, so as the protocol related meta-infos on signals.
+
+Might happen that a unit disk wifi transmission cant be received because the transmission's modulation doesn't match the receiver's settings **TODO** not sure its needed
+
+**TODO** The unit disk only simulates abrupt attenuation, i.e. in terms of receivability, the signal is not attenuated at all in communication range, but the signal strength is zero outside of it. Also, any interfering signal can prevent reception, and obstacles completely block signals. There is no probabilistic error modeling (actually no error modeling at all ?)(signals in communication range are always received, unless there is an interfering signal; signals in the interference range always interfere with other receptions)
+
+.. **TODO** packet level/bit level/symbol level simulation -> fuggetlen az analog reprezentaciotol
+   a metainfok is fuggetlenek tole
+
+**TODO** az alaog model megvalasztasa csomo dolgok szabadon hagy...
+
+.. lehet olyan h a unit disk wifi nem tudja venni emrt a modulatio nem jo
 
 .. **TODO**: the actual parameters
 
@@ -219,20 +284,29 @@ The unit disk receiver's :par:`ignoreInterference` parameter configures whether 
    Also, there is a unit disk version of Wifi: the :ned:`Ieee80211UnitDiskRadio` module contains a :ned:`Ieee80211UnitDiskTransmitter` and a :ned:`Ieee80211UnitDiskReceiver`.
    (to be used with :ned:`UnitDiskRadioMedium`).
 
-The unit disk analog model is suitable for wireless simulations in which the details of the physical layer is not important, such as testing routing protocols, BECAUSE **TODO**.... The following modules use the unit disk analog model:
+The unit disk analog model is suitable for wireless simulations in which the details of the physical layer is not important, such as testing routing protocols. The unit disk model produces all/the physical phenomena relevant to routing protocols, i.e. varying connectivity; nodes have a range, transmissions interfere, and not all packets get delivered and not directly. In this case, it is an adequate abstraction for physical layer behavior.
 
-TODO a routing protocolnal az a lényeg h ne menjen át minden csomag, zavarjak is egymast
-ne tudjon mindenki mindenkivel beszelni
-zavarjak egymast
-ne pofazzanak egymasba
+The following modules use the unit disk analog model:
 
-routing protocol szempontjabol scak az erdekes h atment e a csomag
+..  TODO a routing protocolnal az a lényeg h ne menjen át minden csomag, zavarjak is egymast
+  ne tudjon mindenki mindenkivel beszelni
+  zavarjak egymast
+  ne pofazzanak egymasba
 
-ha az osszes jelenseget produkalja amit egy igazi phy akkor mar jo
+.. because the ranges of the unit disk model is an adequate abstraction for physical layer behavior
 
-too much detaillel kell foglalkozni
+.. because for routing protocols, its required to have some kind of range, so that not all nodes can talk to each other;
+   interference is also important...and that not all packets get delivered all the time
 
-connectivity...range
+.. **!** The unit disk model produces all/the physical phenomena relevant to routing protocols, i.e. varying connectivity; nodes have a range, transmissions interfere, and not all packets get delivered and not directly. In this case, it is an adequate abstraction for physical layer behavior.
+
+..  routing protocol szempontjabol scak az erdekes h atment e a csomag
+
+  ha az osszes jelenseget produkalja amit egy igazi phy akkor mar jo
+
+  too much detaillel kell foglalkozni
+
+  connectivity...range
 
 
 - :ned:`UnitDiskRadioMedium`: the only radio medium using the unit disk analog model; to be used with all unit disk radio types
@@ -261,13 +335,15 @@ connectivity...range
 
 .. - **TODO** its simple and runs fast; suitable for scenarios where the details of tranmissisons don't matter/the emphasis is not on that, for example, routing
 
-**V1** The unit disk model is simple and fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+.. **V1** The unit disk model is simple and fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
 
-**TODO** too much examining routing protocols; what kind of details
+.. **TODO** too much examining routing protocols; what kind of details
 
-**V2** The unit disk model is simple and fast. The drawback is that it's not very realistic, but it is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+.. **V2** The unit disk model is simple and fast. The drawback is that it's not very realistic, but it is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
 
-**V3** The unit disk model uses a simple physical layer abstraction and it's fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+.. **V3** The unit disk model uses a simple physical layer abstraction and it's fast. It is suitable scenarios where the physical layer details are not important for the simulation, such as examining routing protocols.
+
+**TODO** performance ?
 
 .. - there are actually, there are radios, which contain the transmitters and receivers
    and there is the radio medium...need to use compatible...some examples
@@ -298,29 +374,29 @@ In the simulation, ``source`` sends ping requests to ``destination``, and ``dest
 
 .. **V1** In this scenario, the emphasis is on the connectivity of the source and destination hosts,
 
-This scenario examines the connectivity of the source and destination hosts,
-i.e. how the moving intermediate hosts can build temporary routes and relay the ping messages. In this context, the communication ranges of the hosts is an adequate abstraction for the physical layer, thus the unit disk analog model is suitable for this purpose.
+.. This scenario examines the connectivity of the source and destination hosts,
+   i.e. how the moving intermediate hosts can build temporary routes and relay the ping messages. In this context, the communication ranges of the hosts is an adequate abstraction for the physical layer, thus the unit disk analog model is suitable for this purpose.
 
-**TODO** bovebben...miert adequate...kidomborit...egy routing protocol mit var az alatta levo layertol
+.. **TODO** bovebben...miert adequate...kidomborit...egy routing protocol mit var az alatta levo layertol
 
-pl nem tudja azonnal elkuldeni
+  pl nem tudja azonnal elkuldeni
 
-konnyebb vele gondolkodni
+  konnyebb vele gondolkodni
 
 ha routing protocolt fejlesztesz, nem nyilvanvalo h mit kell beirni a physical layer settingsbe
 
-inibe mind a 3 parameter
+.. inibe mind a 3 parameter
 
-comm range 100
-interference 200
-detection 400
+  comm range 100
+  interference 200
+  detection 400
 
 van interference -> ezt kiemel
 
 Here is the configuration in omnetpp.ini:
 
 .. literalinclude:: ../omnetpp.ini
-   :start-at: Config Routing3
+   :start-at: Config Routing4
    :end-at: displayCommunicationRanges
    :language: ini
 
@@ -346,11 +422,13 @@ Here is a video of the simulation running (successful ping message sends between
 
 The source and destination hosts are connected intermittently. If the intermediate nodes move out of range before the routes can be built then there is no connectivity. This can happen if the nodes move too fast, as route formation takes time due to the AODV protocol overhead.
 
+There is no communication outside of the communication range. The transmission interfere with each other and the nodes back off from transmitting, but its not visible here. Also the interference ranges are not displayed as they are too large.
+
 **TODO** milyen jelenségek jutnak érvényre az analog modelben, hogy teljesiti a kovetelmenyeket
 
--> communication range, interference
+.. -> communication range, interference
 
-no communication out of communication range; there is interference but its not visible here, and the ranges would be too big so its not displayed
+  no communication out of communication range; there is interference but its not visible here, and the ranges would be too big so its not displayed
 
 .. - this can be used to run simulations to figure out how fast the nodes can move so that connectivity can be maintained
    - as the AODV protocol has overhead
@@ -365,7 +443,7 @@ Scalar Example: SNIR and Packet Error Rate vs Distance
 
 .. **TODO** Throughput/SNIR vs Distance
 
-x
+.. x
 
   - this example is about the scalar
   - **why is t his good for this purpose? cos we need the attenuation/the reception needs to depend on the power levels**
@@ -418,11 +496,11 @@ x
 .. **V3** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
   Scalar radios model protocol features such as preamble duration, head length, bitrate and modulation. It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation. **TODO** the analog model dont model protocol features but the radios using it
 
-**V4** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
+The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
 It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
 
 .. **V5** The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
-It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception; the SNIR can be used be error models to calculate bit error rate and apcket error rate of receptions.
+  It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception; the SNIR can be used be error models to calculate bit error rate and apcket error rate of receptions.
 
 .. Error models can calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
 
@@ -434,11 +512,11 @@ In the scalar model, signals are represented with a boxcar shape in frequency an
 
 **TODO** It only works when they have the same center frequency and bw
 
-**TODO** mind3 analog modelhez egy ábra
+  **TODO** mind3 analog modelhez egy ábra
 
-unit: 3 circles
-scalar: 3d ábra, 2D boxcar fv, start end time, cf, bw, power be van jelolve
-dimensional: bonyult shape
+  unit: 3 circles
+  scalar: 3d ábra, 2D boxcar fv, start end time, cf, bw, power be van jelolve
+  dimensional: bonyult shape
 
 .. **V3/2** Signals are represented with a boxcar shape in frequency and time. When simulating interference/concurrent transmissions, signals can either completely overlap (same center frequency and bandwidth; signals interfere), or not overlap at all (no interference). The model cant simulate partially overlapping spectrums (results in an error) or realistic signal shapes in frequency and time.
 
@@ -456,13 +534,15 @@ Radios using the scalar analog representation also model features of protocols s
 The scalar model is more realistic than unit disk, but also requires more computing power. Although it can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
 It can also be used when power level, attenuation, path and obstacle loss, snir, and realistic error modeling is needed.
 
-**TODO** emphasize
+Note that in showcases and tutorials, the scalar model is the most commonly used, it's a kind of default. It represents STUFF pretty realistically, but not very complex. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
-unit disk: abrupt attenuation; no probabilistic error model. if there is an interfering signal, it doesnt receive; cant pass obstacles
-scalar: ahol problemat okoz az abrupt change; probabilistic error model is needed; continuous changes...
-ez a default -> ha nincs szükséged ilyen bonyolultra, akkor átváltod unit diskre; ha bonyolultabb kell akkor dimensional
+  **TODO** emphasize
 
-a PER vs SNIR-t akarod ezt nem tudod a unit diskkel
+  unit disk: abrupt attenuation; no probabilistic error model. if there is an interfering signal, it doesnt receive; cant pass obstacles
+  scalar: ahol problemat okoz az abrupt change; probabilistic error model is needed; continuous changes...
+  ez a default -> ha nincs szükséged ilyen bonyolultra, akkor átváltod unit diskre; ha bonyolultabb kell akkor dimensional
+
+  a PER vs SNIR-t akarod ezt nem tudod a unit diskkel
 
 ..  so
 
@@ -490,10 +570,10 @@ In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The
 
 **TODO** switch to bitlevel -> per vs snir adott technologiara jellemzo -> try
 
-apsklayeredscalarradio
+  apsklayeredscalarradio
 
-ha nem bitlevel, akkor a result az error modellben levo fuggveny (per vs snir)
-ha bitlevel, akkor bonyolultabb
+  ha nem bitlevel, akkor a result az error modellben levo fuggveny (per vs snir)
+  ha bitlevel, akkor bonyolultabb
 
 Here is the configuration in omnetpp.ini:
 
@@ -782,7 +862,9 @@ The parameter value above describes the following spectrum (displayed on a spect
 
 .. note:: Even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
 
-In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, slightly overlapping Wifi channels. A noise source (:ned:`NoiseSource`) creates small bursts of noise periodically, which overlaps with both host pair's transmissions. **TODO** both host pair's -> ? ? ? ? which overlaps with all signals
+In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, slightly overlapping Wifi channels. A noise source (:ned:`NoiseSource`) creates small bursts of noise periodically, which overlaps with all transmissions.
+
+.. **TODO** both host pair's -> ? ? ? ? which overlaps with all signals
 
 The :ned:`NoiseSource` module creates dimensional transmissions, which interfere with other signals. It contains a transmitter module (:ned:`NoiseDimensionalTransmitter`), an antenna module (:ned:`IsotropicAntenna` by default), mobility module (so that it has a position, and optinally move around):
 

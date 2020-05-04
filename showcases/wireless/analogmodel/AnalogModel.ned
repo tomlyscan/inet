@@ -3,6 +3,7 @@ package inet.showcases.wireless.analogmodel;
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
 import inet.node.inet.AdhocHost;
 import inet.node.inet.ManetRouter;
+import inet.physicallayer.apskradio.bitlevel.ApskLayeredScalarRadioMedium;
 import inet.physicallayer.common.packetlevel.NoiseSource;
 import inet.physicallayer.ieee80211.packetlevel.Ieee80211DimensionalRadioMedium;
 import inet.physicallayer.ieee80211.packetlevel.Ieee80211ScalarRadioMedium;
@@ -235,6 +236,32 @@ network AnalogModelShowcaseDistanceNetwork4
         }
 }
 
+network AnalogModelShowcaseDistanceNetwork5
+{
+    parameters:
+        @display("bgb=901.5187,376.65");
+    submodules:
+        visualizer: IntegratedMultiVisualizer {
+            parameters:
+                @display("p=64.256,62.247997");
+        }
+        configurator: Ipv4NetworkConfigurator {
+            parameters:
+                @display("p=64.256,180.72");
+        }
+        radioMedium: ApskLayeredScalarRadioMedium {
+            parameters:
+                @display("p=62.247997,287.14398");
+        }
+        destination: AdhocHost {
+            parameters:
+                @display("p=500,179.60625");
+        }
+        source: AdhocHost {
+            @display("p=363.448,180.72");
+        }
+}
+
 network AnalogModelShowcaseNoiseNetwork5
 {
     @display("bgb=400,400");
@@ -267,4 +294,5 @@ network AnalogModelShowcaseNoiseNetwork5
 }
 
 network x extends AnalogModelShowcaseNoiseNetwork2
-{}
+{
+}
