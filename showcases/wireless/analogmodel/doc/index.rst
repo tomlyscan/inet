@@ -249,17 +249,17 @@ The unit disk analog model is the simplest available in INET. It models three ra
 
 .. Furthermode, the signals might carry protocol related meta-information, configurable by parameters, such as :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration.
 
-Furthermode, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic UnitDiskRadio, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration; in the case of Ieee80211UnitDiskRadio, the opMode and channelNumber are configurable./for example
+Furthermode, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic UnitDiskRadio, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration. In the case of Ieee80211UnitDiskRadio, the opMode and channelNumber are configurable, and other parameters are set automatically by the MAC.
+
+**TODO** glue sentence A unit disk wifi transmission might not be correctly received because the transmission's modulation doesn't match the receiver's settings **TODO** not sure its needed
+
+.. **TODO** and other parameters are set automatically by the mac.
 
 ..  -> actually, the ieee80211unitdiskradio extends ieee80211radio, so it has all the parameters of that
 
 ..  attol meg hogy unit disk, lehetnek ilyen meta infok a signalon
 
-Note that the simulated level of detail, i.e. packet, bit, or symbol-level, is independent of the used analog model representation, so as the protocol related meta-infos on signals.
-
-Might happen that a unit disk wifi transmission cant be received because the transmission's modulation doesn't match the receiver's settings **TODO** not sure its needed
-
-**TODO** The unit disk only simulates abrupt attenuation, i.e. in terms of receivability, the signal is not attenuated at all in communication range, but the signal strength is zero outside of it. Also, any interfering signal can prevent reception, and obstacles completely block signals. There is no probabilistic error modeling (actually no error modeling at all ?)(signals in communication range are always received, unless there is an interfering signal; signals in the interference range always interfere with other receptions)
+.. note:: The simulated level of detail, i.e. packet, bit, or symbol-level, is independent of the used analog model representation, so as the protocol related meta-infos on signals.
 
 .. **TODO** packet level/bit level/symbol level simulation -> fuggetlen az analog reprezentaciotol
    a metainfok is fuggetlenek tole
@@ -271,6 +271,8 @@ Might happen that a unit disk wifi transmission cant be received because the tra
 .. **TODO**: the actual parameters
 
 The unit disk receiver's :par:`ignoreInterference` parameter configures whether interfering signals ruin receptions (``false`` by default).
+
+The unit disk only simulates abrupt attenuation, i.e. in terms of receivability, the signal is not attenuated at all in communication range, but the signal strength is zero outside of it. Also, any interfering signal can prevent reception, and obstacles completely block signals. There is no probabilistic error modeling.
 
 .. **TODO**
 
@@ -284,7 +286,7 @@ The unit disk receiver's :par:`ignoreInterference` parameter configures whether 
    Also, there is a unit disk version of Wifi: the :ned:`Ieee80211UnitDiskRadio` module contains a :ned:`Ieee80211UnitDiskTransmitter` and a :ned:`Ieee80211UnitDiskReceiver`.
    (to be used with :ned:`UnitDiskRadioMedium`).
 
-The unit disk analog model is suitable for wireless simulations in which the details of the physical layer is not important, such as testing routing protocols. The unit disk model produces all/the physical phenomena relevant to routing protocols, i.e. varying connectivity; nodes have a range, transmissions interfere, and not all packets get delivered and not directly. In this case, it is an adequate abstraction for physical layer behavior.
+The unit disk analog model is suitable for wireless simulations in which the details of the physical layer is not important, such as testing routing protocols. The unit disk model produces the physical phenomena relevant to routing protocols, i.e. varying connectivity; nodes have a range, transmissions interfere, and not all packets get delivered and not directly. In this case, it is an adequate abstraction for physical layer behavior.
 
 The following modules use the unit disk analog model:
 
@@ -368,7 +370,7 @@ We'll demonstrate the unit disk analog model in an example scenario featuring mo
    :width: 100%
    :align: center
 
-In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
+In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles; the interference ranges are not displayed, but all concurrent transmissions interfere. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
 
 .. **TODO** why in this scenario unit disk is the right choice ?
 
@@ -531,8 +533,9 @@ Radios using the scalar analog representation also model features of protocols s
 
 .. **TODO** also set centerfrequency bandwidth with parameters
 
-The scalar model is more realistic than unit disk, but also requires more computing power. Although it can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
+The scalar model is more realistic than unit disk, but also requires more computing power. It can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
 It can also be used when power level, attenuation, path and obstacle loss, snir, and realistic error modeling is needed.
+**TODO** redundancy
 
 Note that in showcases and tutorials, the scalar model is the most commonly used, it's a kind of default. It represents STUFF pretty realistically, but not very complex. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
@@ -624,9 +627,9 @@ The dimensional analog model represents signal power as a 2-dimensional function
 - Simulate complex signal interactions, i.e. multiple arbitrary signal shapes can overlap to any degree
 - Simulate interference of different wireless technologies (cross-technology interference)
 
-It is the most accurate analog signal representation, but its performance is comparable to that of the scalar model. In contrast to the unit disk and scalar models, the signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
+It is the most accurate analog signal representation, but its performance is worse than that of the scalar model (the performance is slightly worse when the gains are set so that the boxcar signal shape of the scalar model is used). In contrast to the unit disk and scalar models, the signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
 
-Generally, the performance is worse; ha ugy van felparameterezve h ugyanazt csinalja amit a scalar model csinal, akkor picit lassabb;
+.. Generally, the performance is worse; ha ugy van felparameterezve h ugyanazt csinalja amit a scalar model csinal, akkor picit lassabb;
 
 .. **V4** The dimensional analog model represents signal power as a multi-dimensional function of time and frequency. It can model arbitrary signal shapes in frequency and time, simulate interference of signals with partially overlapping spectrums, and also simulate interference of different wireless technologies (cross-technology interference). It is the most accurate analog signal representation, as more complex signal interactions can be simulated. but its performance is similar to the scalar model/but it also requires the most computing power. The signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see TODO).
 
@@ -751,7 +754,7 @@ The dimensional transmitters in INET use the API to create transmissions. For ex
 - Interfering signals are summed with the addition function.
 - SNIR is calculated by dividing the received signal with interfering signals.
 
-TODO a sima attenuation function 2 dimenzios; a frequency and time dependent 5 dimenzios
+**TODO** a sima attenuation function 2 dimenzios; a frequency and time dependent 5 dimenzios
 path loss func. 3 dim: terjedesi sebesseg, tavolsag es frequency fuggo
 obstacle loss func. 7 dim: 6 ter (forras es cel) 1 frequency
 -> ezt meg lehet emliteni fel mondat
@@ -806,19 +809,6 @@ The transmitters have parameters to set the power...
 
     - types
 
-**TODO** normalization parameters
-
-The :par:`timeGainsNormalization` and :par:`frequencyGainsNormalization` parameters set the normalization.
-The normalization parameters specify whether to normalize the signal function to 1. Normalization parameters:
-
-normalization: normalize the gain parameters in the given dimension before applying the transmission power
-
-- No normalization
-- Integral: the area below the signal function equals to 1
-- Maximum: the maximum of the signal function equals to 1
-
-; this is multiplied by the transmission power
-
 .. The signal shapes can be configured using the :par:`timeGains` and :par:`frequencyGains` parameters of dimensional transmitters.
 
 .. **TODO** briefly about the syntax
@@ -842,7 +832,11 @@ Here is an example signal spectrum definition:
 
 Briefly about the syntax (applies to the :par:`timeGains` parameter as well):
 
-ez egy bizonyos transimtter signal eloallitasi mechinizmusa...ez egy
+.. ez egy bizonyos transimtter signal eloallitasi mechinizmusa...ez egy
+
+Note that this is the mechanism that the transmitters in INET use to specify the signal shapes; there are multiple ways to do this, using the API.
+
+.. Note that this is the mechanism that the transmitters currently in INET use to specify the signal shapes; there are a multitude of ways to do this, using the API.
 
 this description only applies for a specific set of transmitters (ami jelenleg van az INETben)...there are many other ways
 
@@ -861,6 +855,21 @@ The parameter value above describes the following spectrum (displayed on a spect
    :align: center
 
 .. note:: Even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
+
+**TODO** normalization parameters
+
+The :par:`timeGainsNormalization` and :par:`frequencyGainsNormalization` parameters set the normalization.
+The normalization parameters specify whether to normalize the gain parameters in the given dimension before applying the transmission power. The parameter values:
+
+.. Normalization parameters:
+
+.. normalization: normalize the gain parameters in the given dimension before applying the transmission power
+
+- No normalization
+- Integral: the area below the signal function equals to 1
+- Maximum: the maximum of the signal function equals to 1
+
+Then the signal is multiplied by the transmission power.
 
 In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, slightly overlapping Wifi channels. A noise source (:ned:`NoiseSource`) creates small bursts of noise periodically, which overlaps with all transmissions.
 
@@ -885,7 +894,7 @@ Here is the configuration in omnetpp.ini pertaining to the radio settings:
 
 The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. They are put on slightly overlapping Wifi channels **TODO** redundant. The signal spectrums are configured to be the spectral mask of OFDM transmissions in the 802.11 standard.
 
-**TODO** min SNIR; power lejjebb vesz; nem kell a magyarazkodas a SNIRrol
+.. **TODO** min SNIR; power lejjebb vesz; nem kell a magyarazkodas a SNIRrol
 
 **TODO** insert spectrum figure of 802.11 standard thing
 
@@ -908,13 +917,13 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. They are put 
    :start-after: the reception.
    :end-before: We set the
 
-.. include:: ../../coexistence/doc/index.rst
+.. .. include:: ../../coexistence/doc/index.rst
    :start-after: either ``min`` or ``mean``.
    :end-before: We set the
 
 .. **TODO** why we use mean here ?
 
-We use mean SNIR because the noise bursts are short compared to the hosts' transmissions, and it wouldn't be realistic if the short bursts ruined the longer data frames.
+.. We use mean SNIR because the noise bursts are short compared to the hosts' transmissions, and it wouldn't be realistic if the short bursts ruined the longer data frames.
 
 .. **TODO** describe the noise source
 
