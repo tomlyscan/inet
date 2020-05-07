@@ -117,6 +117,27 @@ network AnalogModelShowcaseRoutingNetwork4
         }
 }
 
+network AnalogModelShowcaseRoutingNetwork5
+{
+    parameters:
+        @display("bgb=1600,1600");
+        int numHosts;
+
+    submodules:
+        host: ManetRouter {
+            @display("p=800,800");
+        }
+        radioMedium: UnitDiskRadioMedium {
+            @display("p=38,28");
+        }
+        configurator: Ipv4NetworkConfigurator {
+            @display("p=38.461544,66.863914");
+        }
+        visualizer: IntegratedMultiVisualizer {
+            @display("p=38.461544,106.50889");
+        }
+}
+
 //network AnalogModelShowcaseDistanceNetwork
 //{
 //    @display("bgb=400,400");
