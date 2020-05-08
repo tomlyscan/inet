@@ -114,13 +114,17 @@ The transmission, propagation and reception process is as follows:
 
   ----
 
-- The transmitter module creates an analog description of the signal at the location and time of the transmission
-- The propagation submodule of the radio medium module shifts this signal in time and space to the location and time of reception.
+- The transmitter module creates an analog description of the signal
 - The analog model submodule of the radio medium module applies attenuation (potentially in a space, time and frequency dependent way).
-- The obstacle loss submodule of the radio medium module applies the effects of obstacles to the signal.
 - The receiver module gets a physical representation of the signal and the calculated signal-to-noise-and-interference-ratio (SNIR) from the radio medium module.
 
-**TODO** except for the unit disk, there is no attenuation, and SNIR...
+.. - The transmitter module creates an analog description of the signal at the location and time of the transmission
+  - The propagation submodule of the radio medium module shifts this signal in time and space to the location and time of reception.
+  - The analog model submodule of the radio medium module applies attenuation (potentially in a space, time and frequency dependent way).
+  - The obstacle loss submodule of the radio medium module applies the effects of obstacles to the signal.
+  - The receiver module gets a physical representation of the signal and the calculated signal-to-noise-and-interference-ratio (SNIR) from the radio medium module.
+
+.. **TODO** except for the unit disk, there is no attenuation, and SNIR...
 
 There are distinct types of transmitter, receiver and radio medium modules, using different analog signal representation models.
 
@@ -129,6 +133,8 @@ There are distinct types of transmitter, receiver and radio medium modules, usin
 INET contains the following analog model types, presented in the order of increasing complexity:
 
 - **Unit disk**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the relative power of signals, e.g. testing routing protocols.
+
+**TODO** annotations of whats what
 
 .. figure:: media/range.png
    :align: center
@@ -149,6 +155,8 @@ INET contains the following analog model types, presented in the order of increa
 .. - **Scalar**: Signal power is represented by a scalar value. Transmissions have a center frequency and bandwidth; **TODO** attentuation due to distance or other stuff Signal interfere when their center frequency and bandwidth is exactly the same (and the signal power is high enough TODO). When there is no overlap in the frequency spectrum, they don't interfere. Overlapping signals can't be simulated with this model, it throws and error. **TODO** suitable for what
 
 - **Scalar**: Signal power is represented with a scalar value. Transmissions have a center frequency and bandwidth, but modeled as flat signals in frequency and time. Numerically calculated attenuation is simulated, and a SNIR value for reception is calculated and used by error models to calculate reception probability. This model can only be used when the center frequency and bandwidth of interfering signals is exactly the same. Suitable for simulations where attenuation, SNIR, and error modeling is required but the flat signal is adequate.
+
+**TODO** or completely unrelated...
 
 .. .. figure:: media/scalar3d.png
    :align: center
@@ -175,7 +183,9 @@ INET contains the following analog model types, presented in the order of increa
 
 .. **TODO** suitable for what
 
-- **Dimensional**: Signal power density is represented as a 2-dimensional function of frequency and time; arbitrary signal shapes can be defined. Simulates time and frequency dependent attenuation and SNIR. Suitable for simulating interference of signals with complex spectral and temporal characteristics, and cross-technology interference (see also :doc:`/showcases/wireless/coexistence/doc/index`).
+- **Dimensional**: Signal power density is represented as a 2-dimensional function of frequency and time; arbitrary signal shapes can be specified. Simulates time and frequency dependent attenuation and SNIR. Suitable for simulating interference of signals with complex spectral and temporal characteristics, and cross-technology interference (see also :doc:`/showcases/wireless/coexistence/doc/index`).
+
+**TODO** its a simple example (no complex temporal characteristics) -> odair
 
 .. figure:: media/dimensional3d.png
    :align: center
@@ -269,8 +279,8 @@ The unit disk analog model is the simplest available in INET. It models three ra
 
 .. Furthermode, the signals might carry protocol related meta-information, configurable by parameters, such as :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration.
 
-Furthermode, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic :ned:`UnitDiskRadio`, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration. In the case of :ned:`Ieee80211UnitDiskRadio`, the :par:`opMode` and :par:`channelNumber` are configurable, and other parameters are set automatically by the MAC.
-The protocol related meta-information can be used by the simulation model, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
+Furthermore, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic :ned:`UnitDiskRadio`, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration. In the case of :ned:`Ieee80211UnitDiskRadio`, the :par:`opMode` and :par:`channelNumber` are configurable, and other parameters are set automatically by the MAC.
+The protocol related meta-information can still be used by the simulation model, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
 
 ..  **TODO** not sure its needed
 
@@ -296,6 +306,8 @@ The unit disk receiver's :par:`ignoreInterference` parameter configures whether 
 .. **TODO** they ruin it if they are present
 
 The unit disk only simulates abrupt attenuation, i.e. in terms of receivability, the signal is not attenuated at all in communication range, but the signal strength is zero outside of it. Also, any interfering signal prevents reception, and obstacles completely block signals. There is no probabilistic error modeling.
+
+**TODO** tavolsaggal nem folytonos a veteli esely -> a valosagban nem jellemzo -> atir
 
 .. **TODO**
 
@@ -409,6 +421,7 @@ In the simulation, ``source`` sends ping requests to ``destination``, and ``dest
   konnyebb vele gondolkodni
 
 **TODO** ha routing protocolt fejlesztesz, nem nyilvanvalo h mit kell beirni a physical layer settingsbe
+-> ezt bele lehet irni -> nem ertesz a physical layerhez
 
 .. inibe mind a 3 parameter
 
@@ -449,9 +462,9 @@ The source and destination hosts are connected intermittently. If the intermedia
 
 .. There is no communication outside of the communication range. The transmission interfere with each other and the nodes back off from transmitting, but its not visible here.**TODO** Also the interference ranges are not displayed as they are too large.
 
-There is no communication outside of the communication range. Host contend for channel access, and defer from transmitting when there are other ongoing transmissions. The interference ranges of hosts cover the whole network, so transmissions cause interference all over the network.
+There is no communication outside of the communication range. Hosts contend for channel access, and defer from transmitting when there are other ongoing transmissions. The interference ranges of hosts cover the whole network, so transmissions cause interference all over the network.
 
-**TODO** milyen jelenségek jutnak érvényre az analog modelben, hogy teljesiti a kovetelmenyeket
+.. **TODO** milyen jelenségek jutnak érvényre az analog modelben, hogy teljesiti a kovetelmenyeket
 
 .. -> communication range, interference
 
@@ -558,11 +571,14 @@ Radios using the scalar analog representation also model features of protocols s
 
 .. **TODO** also set centerfrequency bandwidth with parameters
 
-The scalar model is more realistic than unit disk, but also requires more computing power. It can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
-It can also be used when power level, attenuation, path and obstacle loss, snir, and realistic error modeling is needed.
-**TODO** redundancy
+The scalar model is more realistic than unit disk, but also more computationally intensive. It can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
+It should be used when power level, attenuation, path and obstacle loss, snir, and realistic error modeling is needed.
 
-Note that in showcases and tutorials, the scalar model is the most commonly used, it's a kind of arbitrary default. It represents signal power, attenuation, frequency bands/channels, and SNIR pretty realistically, but it's not very complex. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
+.. **TODO** redundancy
+
+**TODO** more computing power -> something else
+
+.. note:: In showcases and tutorials, the scalar model is the most commonly used, it's a kind of arbitrary default. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
 .. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
@@ -632,16 +648,16 @@ Note that the communication range of the source host is indicated with a blue ci
 
 .. and as an optimization, the radio medium module doesn't send them to the destination host, thus there are no packet drop animations.
 
-Dimensional Example: Interference from a Periodic Noise Source
---------------------------------------------------------------
+.. Dimensional Example: Interference from a Periodic Noise Source
+   --------------------------------------------------------------
 
-Dimensional Example: Multi-channel interference from a Periodic Noise Source
-----------------------------------------------------------------------------
+.. Dimensional Example: Multi-channel interference from a Periodic Noise Source
+   ----------------------------------------------------------------------------
 
-Dimensional Example: Interference of complex signal spectrums
--------------------------------------------------------------
+Dimensional Example: Interference of Signals with Complex Spectrums
+-------------------------------------------------------------------
 
-**TODO** nem jo a title; azert dimensional mert az interferencia frequency domainben nem trivialis nem mert periodic
+.. **TODO** nem jo a title; azert dimensional mert az interferencia frequency domainben nem trivialis nem mert periodic
 
 .. - this example is about dimensional
   - why is it good for this purpose? cos need to model the spectrums accurately. there are two channels which overlap, the noise generator has a different spectrum, and short transmissions which might not be enough in time to corrupt the wifi nodes' transmissions
@@ -662,7 +678,10 @@ The dimensional analog model represents signal power as a 2-dimensional function
 - Simulate complex signal interactions, i.e. multiple arbitrary signal shapes can overlap to any degree
 - Simulate interference of different wireless technologies (cross-technology interference)
 
-It is the most accurate analog signal representation, but its performance is worse than that of the scalar model (the performance is slightly worse when the gains are set so that the boxcar signal shape of the scalar model is used). In contrast to the unit disk and scalar models, the signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
+It is the most accurate analog signal representation, but its performance is worse than that of the scalar model. In contrast to the unit disk and scalar models, the signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
+
+**TODO** (the performance is slightly worse when the gains are set so that the boxcar signal shape of the scalar model is used). -> note-ba -> ha ugy van hasznalva a dim mint a scalar akkor comparable in general (equvalent)
+(used in an equivalent way)
 
 .. Generally, the performance is worse; ha ugy van felparameterezve h ugyanazt csinalja amit a scalar model csinal, akkor picit lassabb;
 
@@ -730,7 +749,7 @@ It is the most accurate analog signal representation, but its performance is wor
 The dimensional analog model uses an efficient generic purpose multi-dimensional mathematical function API. The analog model represents signal spectral power density [W/Hz] as a 2-dimensional function of time [s] and frequency [Hz].
 
 The API provides primitive functions (e.g. constant function), function compositions (e.g. function addition), and allows creating new functions either by implementing the required C++ interface or by combining existing implementations.
-Here are some example functions provided by the API:
+Here are some example functions provided by the above API:
 
 Primitive functions:
 
@@ -795,6 +814,26 @@ path loss func. 3 dim: terjedesi sebesseg, tavolsag es frequency fuggo
 obstacle loss func. 7 dim: 6 ter (forras es cel) 1 frequency
 -> ezt meg lehet emliteni fel mondat
 
+note-ba
+
+- sima attenuation func 2 dim:
+
+lehet csinalni space dependent non isotropic background noise-t a dimensionalben
+
+space frequency dependent attenuation fucntion -> megemlit
+
+-> note it gets compicated/not trivial
+
+composition: pathloss function (sebesseg, tavolsag, fr)
+             space
+             propagatedtransmissionpowerfunction
+
+             -> a lenyeg h ez bonyolult is lehet
+
+
+
+
+
 .. note:: The dimensional transmitters in INET select the most optimal representation for the signal, depending on the gains parameters (described later). For example, if the parameters describe a flat signal, they'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gains parameters describe a complex function, they'll use the generic interpolated function; the gains parameter string actually maps to the samples and the types of interplation between them.
 
 .. **TODO**
@@ -807,9 +846,11 @@ INET contains dimensional version of IEEE 802.11, narrowband and ultra-wideband 
 
 .. The transmitters have parameters to set the power, center frequency, bandwidth, modulation, preamble duration, header length and bitrate (these should be specified in apskradio; in 802.11, the power, op mode and channel number should be specified, the others are set automatically by the mac).
 
-**V1** The transmitters have the :par:`power` parameter to set transmission power. Similarly to scalar transmitters, there are parameters for bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, the :par:`opMode`, :par:`bandName` and :par:`channelNumber` can be set/are available. **TODO**
+.. **V1** The transmitters have the :par:`power` parameter to set transmission power. Similarly to scalar transmitters, there are parameters for bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, the :par:`opMode`, :par:`bandName` and :par:`channelNumber` can be set/are available. **TODO**
 
-**V2** Similarly to the scalar transmitters, dimensional transmitters have parameters for transmission power, bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, there are the :par:`opMode`, :par:`bandName` and :par:`channelNumber` parameters.
+.. **V2** Similarly to the scalar transmitters, dimensional transmitters have parameters for transmission power, bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, there are the :par:`opMode`, :par:`bandName` and :par:`channelNumber` parameters.
+
+**TODO** ezek a parameterek fuggetlen az analog modeltol -> not here but above (applies to all the different analog models) -> at the scalar
 
 **TODO** receivers error models can be set ? -> out of scope
 
@@ -874,7 +915,7 @@ Briefly about the syntax (applies to the :par:`timeGains` parameter as well):
 
 .. ez egy bizonyos transimtter signal eloallitasi mechinizmusa...ez egy
 
-Note that this is the mechanism that the transmitters in INET use to specify the signal shapes; there are multiple ways to do this, using the API.
+Note that this is the mechanism that the transmitters in INET use to specify the signal shapes; there are multiple ways to do this, using the API. -> after the bullet point -> make it a note **TODO**
 
 .. Note that this is the mechanism that the transmitters currently in INET use to specify the signal shapes; there are a multitude of ways to do this, using the API.
 
@@ -908,6 +949,8 @@ The normalization parameters specify whether to normalize the gain parameters in
 - No normalization
 - Integral: the area below the signal function equals to 1
 - Maximum: the maximum of the signal function equals to 1
+
+**TODO** "````"
 
 Then the signal is multiplied by the transmission power.
 
@@ -955,6 +998,8 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. The signal sp
 
 **TODO** limitations of the current error model -> not sure if its needed
 
+-> note-ba -> current error model can only -> the whole bit error rate is based on the min/mean snir, as opposed to the per symbol snir -> delete when the neuralnetworkerrormodel is ready
+
 .. **TODO** when to use which one?
 
 .. **TODO** include the relevant part from spectrum ?
@@ -983,7 +1028,7 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. The signal sp
 
 .. The noise source is configured to create noise transmissions which overlap both host pair's Wifi channels. -> **TODO** redundant
 
-Background noise is specified as power density, instead of power. -> power is meaningless if there are multiple signals with bandwidths
+Background noise is specified as power density, instead of power. -> power is meaningless if there are multiple signals with bandwidths **TODO** power is only relevant when the frequency is defined in a range (whats the bandwidth)
 
 .. **TODO** this is important because the transmissions are defined that way as well ?
 
@@ -1006,3 +1051,5 @@ The noise transmissions often overlap the data frames, yet the short bursts are 
 ..  -> **TODO** nem annyira tartozik ide (a visualization)
 
 **TODO** hogy teljesiti az analog model a kovetelmenyeket ?
+
+interferalnak, hatnak egymasra, latszik, egybelognak, (az errormodellek kihasznaljak/kihasznalhatnak)
