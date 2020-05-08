@@ -539,7 +539,7 @@ In the scalar model, signals are represented with a boxcar shape in frequency an
 
 .. **TODO** It only works when they have the same center frequency and bw
 
-**TODO** mind3 analog modelhez egy ábra
+.. **TODO** mind3 analog modelhez egy ábra
 
   unit: 3 circles
   scalar: 3d ábra, 2D boxcar fv, start end time, cf, bw, power be van jelolve
@@ -564,7 +564,7 @@ It can also be used when power level, attenuation, path and obstacle loss, snir,
 
 Note that in showcases and tutorials, the scalar model is the most commonly used, it's a kind of arbitrary default. It represents signal power, attenuation, frequency bands/channels, and SNIR pretty realistically, but it's not very complex. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
-When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
+.. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
   **TODO** emphasize
 
@@ -807,7 +807,11 @@ INET contains dimensional version of IEEE 802.11, narrowband and ultra-wideband 
 
 .. The transmitters have parameters to set the power, center frequency, bandwidth, modulation, preamble duration, header length and bitrate (these should be specified in apskradio; in 802.11, the power, op mode and channel number should be specified, the others are set automatically by the mac).
 
-The transmitters have parameters to set the power...**TODO**
+**V1** The transmitters have the :par:`power` parameter to set transmission power. Similarly to scalar transmitters, there are parameters for bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, the :par:`opMode`, :par:`bandName` and :par:`channelNumber` can be set/are available. **TODO**
+
+**V2** Similarly to the scalar transmitters, dimensional transmitters have parameters for transmission power, bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, there are the :par:`opMode`, :par:`bandName` and :par:`channelNumber` parameters.
+
+**TODO** receivers error models can be set ? -> out of scope
 
 .. --------
 
