@@ -437,7 +437,7 @@ We'll demonstrate the unit disk analog model in an example scenario featuring mo
       :align: center
 
 .. figure:: media/unitdisknetwork2.png
-   :width: 100%
+   :width: 80%
    :align: center
 
 In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles; the interference ranges are not displayed, but they are large enough so that all concurrent transmissions interfere. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
@@ -601,8 +601,8 @@ In the scalar model, signals are represented with a boxcar shape in frequency an
 
 INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
 
-Radios using the scalar analog representation also model features of protocols such as preamble duration, header length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
-(With :ned:`ApskScalarRadio`, the center frequency and bandwidth parameters are also set manually).
+.. Radios using the scalar analog representation also model features of protocols such as preamble duration, header length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarRadio, these parameters are set directly; in Ieee80211ScalarRadio, one should set the :par:`channelNumber` and :par:`opMode` (a, b, g, n, etc.) parameters.
+   (With :ned:`ApskScalarRadio`, the center frequency and bandwidth parameters are also set manually).
 
 .. **TODO** also set centerfrequency bandwidth with parameters
 
@@ -678,7 +678,7 @@ Here is a video of the simulation (successful link-layer transmissions are indic
 
 .. **TODO** a range-en kivul nem is probalja meg venni (addig van amig megprobalja venni)
 
-As the distance increases between the two hosts, the packet error rate and the SNIR increase, and packets are dropped.
+As the distance increases between the two hosts, SNIR decreases and the packet error rate increases, and packets are dropped.
 Note that the communication range of the source host is indicated with a blue circle. Beyond the circle, transmissions cannot be received correctly, and signal strength falls below the SNIR threshold of the receiver. As an optimization, the reception is not even attempted, thus there are no packet drop animations.
 
 .. and as an optimization, the radio medium module doesn't send them to the destination host, thus there are no packet drop animations.
@@ -812,7 +812,7 @@ Interpolators (between two points):
 
 - Left/right/closer
 - Min/max/average
-- Linear/Linear in decibel
+- Linear/linear in decibel
 
 .. **V1** The API is used by dimensional transmitters and receivers. Here are some examples:
 
