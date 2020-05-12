@@ -212,7 +212,7 @@ INET contains the following analog model types, presented in the order of increa
 
 More complex models are more accurate but more computationally intensive.
 INET contains a version of radio and radio medium module for each type and technology, e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
-:ned:`Ieee802154NarrowbandDimensionalRadio`/:ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
+:ned:`Ieee802154NarrowbandDimensionalRadio`/ :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
 These models use the appropriate analog signal representation (i.e. in the receiver, the transmitter, and the radio medium)
 
 .. **V2** INET contains a version of radio module for each analog model type and technology, e.g. for 802.11, there is :ned:`Ieee80211UnitDiskRadio`, :ned:`Ieee80211ScalarRadio` and :ned:`Ieee80211DimensionalRadio`. Similarly, other technologies (e.g. 802.15.4, Apsk radio) have the approrpirate versions.
@@ -285,14 +285,14 @@ The unit disk analog model is the simplest available in INET. It models three ra
 
 .. Furthermode, the signals might carry protocol related meta-information, configurable by parameters, such as :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration.
 
-Furthermore, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic :ned:`UnitDiskTransmitter`, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration. In the case of :ned:`Ieee80211UnitDiskTransmitter`, the :par:`opMode` and :par:`channelNumber` are configurable, and other parameters are set automatically by the MAC.
-The protocol related meta-information can still be used by the simulation model, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
+.. Furthermore, the signals might carry protocol related meta-information, configurable by parameters. In the case of the generic :ned:`UnitDiskTransmitter`, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`; the bitrate is used to calculate transmission duration. In the case of :ned:`Ieee80211UnitDiskTransmitter`, the :par:`opMode` and :par:`channelNumber` are configurable, and other parameters are set automatically by the MAC.
+   The protocol related meta-information can still be used by the simulation model, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
 
-**TODO** transmitter -> its the parameters of the transmitter -> UnitDiskTransmitter ? ? ? ?
+.. **TODO** transmitter -> its the parameters of the transmitter -> UnitDiskTransmitter ? ? ? ?
 
-.. note:: In general, the signals using any analog model might carry protocol related meta-information, configurable by parameters, such as bitrate, headlength, etc, **TODO** this is enough channel number
+In general, the signals using any analog model might carry protocol related meta-information, configurable by parameters of the transmitter, such as bitrate, header length, modulation, channel number, etc. The protocol related meta-information can be used by the simulation model even with unit disk, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
 
-  . In the case of the generic :ned:`UnitDiskTransmitter` and :ned:`ApskScalarTransmitter`, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`. With the 802.11 transmitters (:ned:`Ieee80211UnitDiskTransmitter`, :ned:`Ieee80211ScalarTransmitter`, etc) , the :par:`opMode` and :par:`channelNumber` are configurable, and other parameters are set automatically by the MAC.
+..   . In the case of the generic :ned:`UnitDiskTransmitter` and :ned:`ApskScalarTransmitter`, for example, the parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate`. With the 802.11 transmitters (:ned:`Ieee80211UnitDiskTransmitter`, :ned:`Ieee80211ScalarTransmitter`, etc) , the :par:`opMode` and :par:`channelNumber` are configurable, and other parameters are set automatically by the MAC.
 
 .. .. note:: Radios using any analog representation also model features of protocols such as preamble duration, header length, bitrate and modulation type. These can be set with parameters of the radio modules; in ApskScalarTransmitter and UnitDiskTransmitter, these parameters are set directly; in the 802.11 transmitters (TODO), one should set the channelNumber and opMode (a, b, g, n, etc.) parameters. (With ApskScalarTransmitter, the center frequency and bandwidth parameters are also set manually).
 
@@ -306,9 +306,9 @@ The protocol related meta-information can still be used by the simulation model,
   - with 802.11 transmitters, the opmode and channelnumber are configurable, the others are set automatically by the mac
   - (With ApskScalarTransmitter, the center frequency and bandwidth parameters are also set manually).
 
-.. note:: Signals often carry protocol-related meta-information, configurable by parameters. These parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate` and :par:`modulation`; the bitrate is used to calculate transmission duration. In the case of the generic transmitter types (UnitDiskTransmitter, ApskScalarTransmitter, for example), these parameters should be specified directly; tith the 802.11 transmitters (:ned:`Ieee80211UnitDiskTransmitter`, :ned:`Ieee80211ScalarTransmitter`, etc) , one should set the :par:`opMode` (a, b, g, n, etc.) and :par:`channelNumber` parameters; the other parameters are set automatically by the MAC. With generic scalar transmitters, such as ApskScalarTransmitter, the center frequency and bandwidth parameters are also set manually).
+.. .. note:: Signals often carry protocol-related meta-information, configurable by parameters. These parameters include :par:`headerLength`, :par:`preambleDuration`, and :par:`bitrate` and :par:`modulation`; the bitrate is used to calculate transmission duration. In the case of the generic transmitter types (UnitDiskTransmitter, ApskScalarTransmitter, for example), these parameters should be specified directly; tith the 802.11 transmitters (:ned:`Ieee80211UnitDiskTransmitter`, :ned:`Ieee80211ScalarTransmitter`, etc) , one should set the :par:`opMode` (a, b, g, n, etc.) and :par:`channelNumber` parameters; the other parameters are set automatically by the MAC. With generic scalar transmitters, such as ApskScalarTransmitter, the center frequency and bandwidth parameters are also set manually).
 
-With the unit disk model, the protocol related meta-information can still be used by the simulation model, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
+.. With the unit disk model, the protocol related meta-information can still be used by the simulation model, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
 
 ..  **TODO** not sure its needed
 
@@ -613,7 +613,7 @@ It should be used when power level, attenuation, path and obstacle loss, snir, a
 
 .. **TODO** more computing power -> something else
 
-.. note:: In showcases and tutorials, the scalar model is the most commonly used, it's a kind of arbitrary default. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
+.. note:: In showcases and tutorials, the scalar model is the most commonly used, it's a kind of arbitrary default. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is chosen.
 
 .. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is used. **TODO**
 
@@ -846,26 +846,26 @@ The dimensional transmitters in INET use the API to create transmissions. For ex
 - Interfering signals are summed with the addition function.
 - SNIR is calculated by dividing the received signal with interfering signals.
 
-**TODO** a sima attenuation function 2 dimenzios; a frequency and time dependent 5 dimenzios
-path loss func. 3 dim: terjedesi sebesseg, tavolsag es frequency fuggo
-obstacle loss func. 7 dim: 6 ter (forras es cel) 1 frequency
--> ezt meg lehet emliteni fel mondat
+.. **TODO** a sima attenuation function 2 dimenzios; a frequency and time dependent 5 dimenzios
+  path loss func. 3 dim: terjedesi sebesseg, tavolsag es frequency fuggo
+  obstacle loss func. 7 dim: 6 ter (forras es cel) 1 frequency
+  -> ezt meg lehet emliteni fel mondat
 
-note-ba
+.. note-ba
 
-- sima attenuation func 2 dim:
+  - sima attenuation func 2 dim:
 
-lehet csinalni space dependent non isotropic background noise-t a dimensionalben
+  lehet csinalni space dependent non isotropic background noise-t a dimensionalben
 
-space frequency dependent attenuation fucntion -> megemlit
+  space frequency dependent attenuation fucntion -> megemlit
 
--> note it gets compicated/not trivial
+  -> note it gets compicated/not trivial
 
-composition: pathloss function (sebesseg, tavolsag, fr)
-             space
-             propagatedtransmissionpowerfunction
+  composition: pathloss function (sebesseg, tavolsag, fr)
+               space
+               propagatedtransmissionpowerfunction
 
-             -> a lenyeg h ez bonyolult is lehet
+               -> a lenyeg h ez bonyolult is lehet
 
 ..  Here are some examples from the API demonstrating function composition:
 
@@ -887,9 +887,9 @@ composition: pathloss function (sebesseg, tavolsag, fr)
 
 .. note:: The above function composition can get really complex. For example, the medium visualizer uses a 5 dimensional function to describe the transmission medium total power spectral density over space (the whole scene), time (the whole duration of the simulation), and frequency (the whole spectrum). Similarly, the API can be used to create a space, time, and frequency-dependent background noise module (not provided in INET currently).
 
-**TODO** background noise
+.. **TODO** background noise
 
-note -> background noise -> hely és ido és frequency fuggo
+.. note -> background noise -> hely és ido és frequency fuggo
 
 .. The composition of these two functions can yield/return/calculate/give the signal power density function at reception.
 
@@ -918,7 +918,7 @@ INET contains dimensional version of IEEE 802.11, narrowband and ultra-wideband 
 
 .. **V2** Similarly to the scalar transmitters, dimensional transmitters have parameters for transmission power, bitrate, header length, modulation, etc; for 802.11DimensionalTransmitter, there are the :par:`opMode`, :par:`bandName` and :par:`channelNumber` parameters.
 
-**TODO** ezek a parameterek fuggetlen az analog modeltol -> not here but above (applies to all the different analog models) -> at the scalar
+.. **TODO** ezek a parameterek fuggetlen az analog modeltol -> not here but above (applies to all the different analog models) -> at the scalar
 
 .. **TODO** receivers error models can be set ? -> out of scope
 
@@ -1068,7 +1068,11 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. The signal sp
 
 .. -> note-ba -> current error model can only -> the whole bit error rate is based on the min/mean snir, as opposed to the per symbol snir -> delete when the neuralnetworkerrormodel is ready
 
-.. note:: In current error models, bit error rate is based on the minimum or mean of the SNIR, as opposed to per symbol SNIR. **TODO** which is kinda limited
+.. note:: In current error models, bit error rate is based on the minimum or mean of the SNIR, as opposed to per symbol SNIR.
+
+.. .. note:: Current error models are limited to the bit error rate being based on the minimum or mean of the SNIR, as opposed to per symbol SNIR.
+
+.. .. note:: In current error models, bit error rate is based on the minimum or mean of the SNIR, as opposed to the more accurate per symbol SNIR.
 
 .. TODO: delete when the neural network error model is ready
 
@@ -1120,10 +1124,23 @@ Here is a video of the simulation. Signals are visualized with colored rings, su
 .. animation speed none, playback speed 0.25, zoom 3.71, normal run from event 299 to 518
    hide physical and data link visualizers until around event 334
 
-The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
+.. The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
+
+.. When the noise transmissions don't overlap with data frames, they cause the hosts to back off and defer from transmitting. The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
+
+Transmissions from one of the hosts and the noise source cause the other host to defer from transmitting. The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
+
+.. TODO the analog model and the error model could use the amount of overlap in frequency and time between the noise and the transmissions to calculate SNIR and packet error rate/reception probability
 
 ..  -> **TODO** nem annyira tartozik ide (a visualization)
 
-**TODO** hogy teljesiti az analog model a kovetelmenyeket ?
+.. **TODO** hogy teljesiti az analog model a kovetelmenyeket ?
 
-interferalnak, hatnak egymasra, latszik, egybelognak, (az errormodellek kihasznaljak/kihasznalhatnak)
+   interferalnak, hatnak egymasra, latszik, egybelognak, (az errormodellek kihasznaljak/kihasznalhatnak)
+
+.. so
+
+  - the signals interfere -> actually, the noise source creates noise in the middle of a transmission, but its not enough to ruin it because its too short
+  - when the noise doesn't overlap with transmissions, it causes the hosts to back off and defer from transmitting
+  - the analog model takes into account the minimum of the SNIR
+  - the analog model and the error model could use the amount of overlap in frequency and time between the noise and the transmissions to calculate SNIR and packet error rate/reception probability
