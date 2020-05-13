@@ -6,9 +6,12 @@ Analog Model
 Goals
 -----
 
-Radio signal analog models represent signals as a physical phenomena as they are transmitted, received and propagate in the wireless medium. Models of different complexity are available, suitable for different purposes.
+Radio signal analog models represent signals as a physical phenomena as they are transmitted,
+received and propagate in the wireless medium. Models of different complexity are available,
+suitable for different purposes.
 
-This showcase describes the available analog signal representation models, their advantages and drawbacks, and contains three example simulations for typical use cases.
+This showcase describes the available analog signal representation models, their advantages and
+drawbacks, and contains three example simulations for typical use cases.
 
 | INET version: ``4.2``
 | Source files location: `inet/showcases/wireless/analogmodel <https://github.com/inet-framework/inet-showcases/tree/master/wireless/analogmodel>`__
@@ -16,7 +19,9 @@ This showcase describes the available analog signal representation models, their
 About Analog Models
 -------------------
 
-The analog signal representation is a model of the signal as a physical phenomenon. Several modules take part in simulating the transmission, propagation and reception of signals, according to the chosen analog signal representation model.
+The analog signal representation is a model of the signal as a physical phenomenon. Several
+modules take part in simulating the transmission, propagation and reception of signals,
+according to the chosen analog signal representation model.
 
 The transmission, propagation and reception process is as follows:
 
@@ -24,23 +29,36 @@ The transmission, propagation and reception process is as follows:
 - The analog model submodule of the radio medium module applies attenuation (potentially in a space, time and frequency dependent way).
 - The receiver module gets a physical representation of the signal and the calculated signal-to-noise-and-interference-ratio (SNIR) from the radio medium module.
 
-There are distinct types of transmitter, receiver and radio medium modules, using different analog signal representation models.
+There are distinct types of transmitter, receiver and radio medium modules, using different
+analog signal representation models.
 
 INET contains the following analog model types, presented in the order of increasing complexity:
 
-- **Unit disk**: Simple model featuring communication, interference and detection ranges as parameters. Suitable for simulations where the emphasis is not on the relative power of signals, e.g. testing routing protocols.
+- **Unit disk**: Simple model featuring communication, interference and detection ranges as
+parameters. Suitable for simulations where the emphasis is not on the relative power of signals,
+e.g. testing routing protocols.
 
 .. figure:: media/range2.png
    :align: center
    :width: 60%
 
-- **Scalar**: Signal power is represented with a scalar value. Transmissions have a center frequency and bandwidth, but modeled as flat signals in frequency and time. Numerically calculated attenuation is simulated, and a SNIR value for reception is calculated and used by error models to calculate reception probability. This model can only be used when the center frequency and bandwidth of interfering signals is exactly the same, or spectrally completely independent. Suitable for simulations where attenuation, SNIR, and error modeling is required but the flat signal is adequate.
+- **Scalar**: Signal power is represented with a scalar value. Transmissions have a center
+frequency and bandwidth, but modeled as flat signals in frequency and time. Numerically
+calculated attenuation is simulated, and a SNIR value for reception is calculated and used
+by error models to calculate reception probability. This model can only be used when the
+center frequency and bandwidth of interfering signals is exactly the same, or spectrally
+completely independent. Suitable for simulations where attenuation, SNIR, and error modeling
+is required but the flat signal is adequate.
 
 .. figure:: media/scalar3d_.png
    :align: center
    :width: 60%
 
-- **Dimensional**: Signal power density is represented as a 2-dimensional function of frequency and time; arbitrary signal shapes can be specified. Simulates time and frequency dependent attenuation and SNIR. Suitable for simulating interference of signals with complex spectral and temporal characteristics, and cross-technology interference (see also :doc:`/showcases/wireless/coexistence/doc/index`).
+- **Dimensional**: Signal power density is represented as a 2-dimensional function of frequency
+and time; arbitrary signal shapes can be specified. Simulates time and frequency dependent
+attenuation and SNIR. Suitable for simulating interference of signals with complex spectral
+and temporal characteristics, and cross-technology interference
+(see also :doc:`/showcases/wireless/coexistence/doc/index`).
 
 .. figure:: media/dimensional3d.png
    :align: center
@@ -49,28 +67,42 @@ INET contains the following analog model types, presented in the order of increa
    An example for a signal with a complex spectrum but constant in time
 
 More complex models are more accurate but more computationally intensive.
-INET contains a version of radio and radio medium module for each type and technology, e.g. :ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
+INET contains a version of radio and radio medium module for each type and technology, e.g.
+:ned:`Ieee80211UnitDiskRadio`/:ned:`UnitDiskRadioMedium`, :ned:`ApskScalarRadio`/:ned:`ApskScalarRadioMedium`,
 :ned:`Ieee802154NarrowbandDimensionalRadio`/ :ned:`Ieee802154NarrowbandDimensionalRadioMedium`, etc.
-These models use the appropriate analog signal representation (i.e. in the receiver, the transmitter, and the radio medium)
+These models use the appropriate analog signal representation (i.e. in the receiver, the transmitter,
+and the radio medium)
 
 Unit Disk Example: Testing routing protocols
 --------------------------------------------
 
-The unit disk analog model is the simplest available in INET. It models three ranges per radio, configurable with parameters:
+The unit disk analog model is the simplest available in INET. It models three ranges per radio,
+configurable with parameters:
 
 - **Communication range**: transmissions are always unsuccessful outside this range
 - **Interference range**: transmissions can't interfere with and prevent other receptions outside this range
 - **Detection range**: transmissions can't be detected outside this range; inside this range, transmissions might cause network nodes detecting them to defer from transmitting (when using a suitable MAC module, such as :ned:`CsmaCaMac` or :ned:`Ieee80211Mac`)
 
-In general, the signals using any analog model might carry protocol related meta-information, configurable by parameters of the transmitter, such as bitrate, header length, modulation, channel number, etc. The protocol related meta-information can be used by the simulation model even with unit disk, e.g. a unit disk Wifi transmission might not be correctly receivable because the transmission's modulation doesn't match the receiver's settings.
+In general, the signals using any analog model might carry protocol related meta-information,
+configurable by parameters of the transmitter, such as bitrate, header length, modulation,
+channel number, etc. The protocol related meta-information can be used by the simulation
+model even with unit disk, e.g. a unit disk Wifi transmission might not be correctly receivable
+because the transmission's modulation doesn't match the receiver's settings.
 
 .. note:: The simulated level of detail, i.e. packet, bit, or symbol-level, is independent of the used analog model representation, so as the protocol related meta-infos on signals.
 
-The unit disk receiver's :par:`ignoreInterference` parameter configures whether interfering signals ruin receptions (``false`` by default).
+The unit disk receiver's :par:`ignoreInterference` parameter configures whether interfering signals
+ruin receptions (``false`` by default).
 
-With the unit disk model, reception probability doesn't change continuously with distance, but the change is abrupt at the edge of the communication range. Also, any interfering signal prevents reception, and obstacles completely block signals. There is no probabilistic error modeling.
+With the unit disk model, reception probability doesn't change continuously with distance, but the
+change is abrupt at the edge of the communication range. Also, any interfering signal prevents reception,
+and obstacles completely block signals. There is no probabilistic error modeling.
 
-The unit disk analog model is suitable for wireless simulations in which the details of the physical layer is not important, such as testing routing protocols (no detailed physical layer knowledge required). The unit disk model produces the physical phenomena relevant to routing protocols, i.e. varying connectivity; nodes have a range, transmissions interfere, and not all packets get delivered and not directly. In this case, it is an adequate abstraction for physical layer behavior.
+The unit disk analog model is suitable for wireless simulations in which the details of the physical
+layer is not important, such as testing routing protocols (no detailed physical layer knowledge required).
+The unit disk model produces the physical phenomena relevant to routing protocols, i.e. varying connectivity;
+nodes have a range, transmissions interfere, and not all packets get delivered and not directly.
+In this case, it is an adequate abstraction for physical layer behavior.
 
 The following modules use the unit disk analog model:
 
@@ -78,13 +110,20 @@ The following modules use the unit disk analog model:
 - :ned:`UnitDiskRadio`: generic radio using the unit disk analog model; contains :ned:`UnitDiskTransmitter` and :ned:`UnitDiskReceiver`
 - :ned:`Ieee80211UnitDiskRadio`: unit disk version of Wifi; contains :ned:`Ieee80211UnitDiskTransmitter`, :ned:`Ieee80211UnitDiskReceiver` and :ned:`Ieee80211Mac`
 
-We'll demonstrate the unit disk analog model in an example scenario featuring mobile adhoc hosts, which use the AODV protocol to maintain routes:
+We'll demonstrate the unit disk analog model in an example scenario featuring mobile adhoc hosts,
+which use the AODV protocol to maintain routes:
 
 .. figure:: media/unitdisknetwork2.png
    :width: 80%
    :align: center
 
-In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles; the interference ranges are not displayed, but they are large enough so that all concurrent transmissions interfere. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
+In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies.
+The source and the destination host are stationary, the other hosts move around the scene in random directions.
+The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles;
+the interference ranges are not displayed, but they are large enough so that all concurrent transmissions
+interfere. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes
+as the topology changes, so that they are able to relay the ping messages between the source and the
+destination hosts.
 
 Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
 
@@ -93,31 +132,50 @@ Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
    :end-at: displayCommunicationRanges
    :language: ini
 
-Here is a video of the simulation running (successful ping message sends between the source and destination hosts are indicated with colored arrows; routes to destination are indicated with black arrows):
+Here is a video of the simulation running (successful ping message sends between the source and
+destination hosts are indicated with colored arrows; routes to destination are indicated with black arrows):
 
 .. video:: media/unitdisk2.mp4
    :width: 80%
 
-The source and destination hosts are connected intermittently. If the intermediate nodes move out of range before the routes can be built then there is no connectivity. This can happen if the nodes move too fast, as route formation takes time due to the AODV protocol overhead.
+The source and destination hosts are connected intermittently. If the intermediate nodes
+move out of range before the routes can be built then there is no connectivity. This can
+happen if the nodes move too fast, as route formation takes time due to the AODV protocol
+overhead.
 
-There is no communication outside of the communication range. Hosts contend for channel access, and defer from transmitting when there are other ongoing transmissions. The interference ranges of hosts cover the whole network, so transmissions cause interference all over the network.
+There is no communication outside of the communication range. Hosts contend for channel access,
+and defer from transmitting when there are other ongoing transmissions. The interference ranges
+of hosts cover the whole network, so transmissions cause interference all over the network.
 
 Scalar Example: SNIR and Packet Error Rate vs Distance
 ------------------------------------------------------
 
 The scalar analog model represents signals with a scalar signal power, a center frequency and a bandwidth.
-It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception. Error models calculate bit error rate and packet error rate of receptions from the SNIR, center frequency, bandwidth, and modulation.
+It also models attenuation, and calculates a signal-to-noise-interference ratio (SNIR) value at reception.
+Error models calculate bit error rate and packet error rate of receptions from the SNIR, center frequency,
+bandwidth, and modulation.
 
-In the scalar model, signals are represented with a boxcar shape in frequency and time. The model can simulate interference when the interfering signals have the same center frequency and bandwidth, and spectrally independent transmissions when the spectrums don't overlap at all; partially overlapping spectrums are not supported by this model (and result in an error).
+In the scalar model, signals are represented with a boxcar shape in frequency and time. The model can
+simulate interference when the interfering signals have the same center frequency and bandwidth, and
+spectrally independent transmissions when the spectrums don't overlap at all; partially overlapping
+spectrums are not supported by this model (and result in an error).
 
-INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also contains the scalar version of ApskRadio, which is a generic radio featuring different modulations such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a corresponding scalar radio medium module (they have ``Scalar`` in their module names; the corresponding radio and radio medium modules should be used together).
+INET contains scalar versions of wireless technologies, such as IEEE 802.11 and 802.15.4; it also
+contains the scalar version of ApskRadio, which is a generic radio featuring different modulations
+such as BPSK, 16-QAM, and 64-QAM. Each of these technologies have a scalar radio module, and a
+corresponding scalar radio medium module (they have ``Scalar`` in their module names; the
+corresponding radio and radio medium modules should be used together).
 
-The scalar model is more realistic than unit disk, but also more computationally intensive. It can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
-It should be used when power level, attenuation, path and obstacle loss, snir, and realistic error modeling is needed.
+The scalar model is more realistic than unit disk, but also more computationally intensive.
+It can't simulate partially overlapping spectrums, only completely overlapping or not overlapping at all.
+It should be used when power level, attenuation, path and obstacle loss, snir, and realistic
+error modeling is needed.
 
 .. note:: In showcases and tutorials, the scalar model is the most commonly used, it's a kind of arbitrary default. When a less complex model is adequate in a showcase or tutorial, the unit disk model is used; when a more complex one is needed, the dimensional is chosen.
 
-In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The source host is stationary, the destination host moves away from the source host. As the distance increases between them, the SNIR decreases and packet error rate increases, so as the number of successfully received transmissions.
+In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The source host is stationary,
+the destination host moves away from the source host. As the distance increases between them,
+the SNIR decreases and packet error rate increases, so as the number of successfully received transmissions.
 
 **TODO** switch to bitlevel -> per vs snir adott technologiara jellemzo -> try
 
@@ -135,7 +193,8 @@ Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
 
 The source host is configured to use the default 802.11g mode, and 54Mbps data rate.
 
-Here is a video of the simulation (successful link-layer transmissions are indicated with arrows; incorrectly received packets are indicated with packet drop animations):
+Here is a video of the simulation (successful link-layer transmissions are indicated with arrows;
+incorrectly received packets are indicated with packet drop animations):
 
 .. video:: media/Distance4.mp4
    :width: 100%
@@ -146,8 +205,11 @@ Here is a video of the simulation (successful link-layer transmissions are indic
 
 **TODO** not SNIR is displayed, and its doesnt increase
 
-As the distance increases between the two hosts, SNIR decreases and the packet error rate increases, and packets are dropped.
-Note that the communication range of the source host is indicated with a blue circle. Beyond the circle, transmissions cannot be received correctly, and signal strength falls below the SNIR threshold of the receiver. As an optimization, the reception is not even attempted, thus there are no packet drop animations.
+As the distance increases between the two hosts, SNIR decreases and the packet error rate increases,
+and packets are dropped. Note that the communication range of the source host is indicated with a
+blue circle. Beyond the circle, transmissions cannot be received correctly, and signal strength falls
+below the SNIR threshold of the receiver. As an optimization, the reception is not even attempted,
+thus there are no packet drop animations.
 
 Dimensional Example: Interference of Signals with Complex Spectrums
 -------------------------------------------------------------------
@@ -158,13 +220,20 @@ The dimensional analog model represents signal power as a 2-dimensional function
 - Simulate complex signal interactions, i.e. multiple arbitrary signal shapes can overlap to any degree
 - Simulate interference of different wireless technologies (cross-technology interference)
 
-It is the most accurate analog signal representation, but its performance is worse than that of the scalar model. In contrast to the unit disk and scalar models, the signal spectrums of the dimensional analog model can also be visualized with spectrum figures, spectrograms and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
+It is the most accurate analog signal representation, but its performance is worse than that
+of the scalar model. In contrast to the unit disk and scalar models, the signal spectrums of
+the dimensional analog model can also be visualized with spectrum figures, spectrograms
+and power density maps (see :doc:`/showcases/visualizer/spectrum/doc/index`).
 
 .. note:: When the dimensional model is used in a way equivalent to the scalar model (i.e. boxcar signal shape in frequency and time), its performance is comparable to the scalar's.
 
-The dimensional analog model uses an efficient generic purpose multi-dimensional mathematical function API. The analog model represents signal spectral power density [W/Hz] as a 2-dimensional function of time [s] and frequency [Hz].
+The dimensional analog model uses an efficient generic purpose multi-dimensional mathematical
+function API. The analog model represents signal spectral power density [W/Hz] as a
+2-dimensional function of time [s] and frequency [Hz].
 
-The API provides primitive functions (e.g. constant function), function compositions (e.g. function addition), and allows creating new functions either by implementing the required C++ interface or by combining existing implementations.
+The API provides primitive functions (e.g. constant function), function compositions
+(e.g. function addition), and allows creating new functions either by implementing
+the required C++ interface or by combining existing implementations.
 Here are some example functions provided by the above API:
 
 Primitive functions:
@@ -206,10 +275,11 @@ The dimensional transmitters in INET use the API to create transmissions. For ex
 
 .. note:: The dimensional transmitters in INET select the most optimal representation for the signal, depending on the gains parameters (described later). For example, if the parameters describe a flat signal, they'll use a boxcar function (in 1D or 2D, whether the signal is flat in one or two dimensions). If the gains parameters describe a complex function, they'll use the generic interpolated function; the gains parameter string actually maps to the samples and the types of interplation between them.
 
-INET contains dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4, and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form).
+INET contains dimensional version of IEEE 802.11, narrowband and ultra-wideband 802.15.4,
+and Apsk radio (the 802.15.4 ultra-wideband version is only available in dimensional form).
 
-The signal shapes in frequency and time can be defined with the :par:`frequencyGains` and :par:`timeGains` parameters of transmitter modules.
-Here is an example signal spectrum definition:
+The signal shapes in frequency and time can be defined with the :par:`frequencyGains`
+and :par:`timeGains` parameters of transmitter modules. Here is an example signal spectrum definition:
 
 .. code-block:: ini
 
@@ -232,7 +302,8 @@ The parameter value above describes the following spectrum (displayed on a spect
 .. note:: Even though the interpolation between the points is linear, it appears curved due to the log scale used on the spectrum figure.
 
 The :par:`timeGainsNormalization` and :par:`frequencyGainsNormalization` parameters set the normalization.
-The normalization parameters specify whether to normalize the gain parameters in the given dimension before applying the transmission power. The parameter values:
+The normalization parameters specify whether to normalize the gain parameters in the given dimension
+before applying the transmission power. The parameter values:
 
 - ``""``: No normalization
 - ``"integral"``: the area below the signal function equals to 1
@@ -240,15 +311,23 @@ The normalization parameters specify whether to normalize the gain parameters in
 
 Then the signal is multiplied by the transmission power.
 
-In the example simulation, there are two host-pairs; one host in each pair sends UDP packets to the other. The host pairs are on different, slightly overlapping Wifi channels. A noise source (:ned:`NoiseSource`) creates small bursts of noise periodically, which overlaps with all transmissions.
+In the example simulation, there are two host-pairs; one host in each pair sends UDP packets
+to the other. The host pairs are on different, slightly overlapping Wifi channels.
+A noise source (:ned:`NoiseSource`) creates small bursts of noise periodically,
+which overlaps with all transmissions.
 
-The :ned:`NoiseSource` module creates dimensional transmissions, which interfere with other signals. It contains a transmitter module (:ned:`NoiseDimensionalTransmitter`), an antenna module (:ned:`IsotropicAntenna` by default), mobility module (so that it has a position, and can optinally move around):
+The :ned:`NoiseSource` module creates dimensional transmissions, which interfere
+with other signals. It contains a transmitter module (:ned:`NoiseDimensionalTransmitter`),
+an antenna module (:ned:`IsotropicAntenna` by default), mobility module (so that it
+has a position, and can optinally move around):
 
 .. figure:: media/noisesource.png
    :width: 25%
    :align: center
 
-The noise transmissions don't have any data or modulation, just a center frequency, bandwidth, power, and configurable arbitrary signal shape in frequency and time. It also has duration and sleep interval parameters.
+The noise transmissions don't have any data or modulation, just a center frequency,
+bandwidth, power, and configurable arbitrary signal shape in frequency and time.
+It also has duration and sleep interval parameters.
 
 Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>` pertaining to the radio settings:
 
@@ -257,7 +336,9 @@ Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>` pertaining
    :end-at: powerSpectralDensity
    :language: ini
 
-The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. The signal spectrums are configured to be the spectral mask of OFDM transmissions in the 802.11 standard. Here is the spectrum displayed on a spectrum figure:
+The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. The signal spectrums
+are configured to be the spectral mask of OFDM transmissions in the 802.11 standard.
+Here is the spectrum displayed on a spectrum figure:
 
 .. figure:: media/80211.png
    :align: center
@@ -265,11 +346,14 @@ The hosts are configured to have :ned:`Ieee80211DimensionalRadio`. The signal sp
 
 .. note:: In current error models, bit error rate is based on the minimum or mean of the SNIR, as opposed to per symbol SNIR.
 
-Background noise is specified as power density, instead of power (specifying signal strength with power is only relevant when the frequency of the signal is defined in a range).
+Background noise is specified as power density, instead of power (specifying signal
+strength with power is only relevant when the frequency of the signal is defined in a range).
 
 **TODO** network + legend (spectrum figure, spectrogram)
 
-Here is a video of the simulation. Signals are visualized with colored rings, successful PHY and datalink-layer transmissions are visualized with arrows. The signals are displayed with spectrum figures and spectrograms:
+Here is a video of the simulation. Signals are visualized with colored rings, successful PHY and
+datalink-layer transmissions are visualized with arrows. The signals are displayed with
+spectrum figures and spectrograms:
 
 .. video:: media/noise1.mp4
    :width: 100%
@@ -277,7 +361,12 @@ Here is a video of the simulation. Signals are visualized with colored rings, su
 .. animation speed none, playback speed 0.25, zoom 3.71, normal run from event 299 to 518
    hide physical and data link visualizers until around event 334
 
-Transmissions from one of the hosts and the noise source cause the other host to defer from transmitting. The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
+Transmissions from one of the hosts and the noise source cause the other host to defer from
+transmitting. The noise transmissions often overlap the data frames, yet the short bursts
+are not enough to ruin their reception, most packets are successfully received. Note that
+the thin line of the noise on the spectrogram is much shorter than the data frame. Also,
+the spectrograms have a colored background due to the background noise (also displayed
+on the spectrum figures).
 
 Sources: :download:`omnetpp.ini <../omnetpp.ini>`, :download:`AnalogModelShowcase.ned <../AnalogModelShowcase.ned>`
 
