@@ -128,7 +128,7 @@ destination hosts.
 Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
 
 .. literalinclude:: ../omnetpp.ini
-   :start-at: Config Routing4
+   :start-at: Config Routing
    :end-at: displayCommunicationRanges
    :language: ini
 
@@ -187,7 +187,7 @@ the SNIR decreases and packet error rate increases, so as the number of successf
 Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
 
 .. literalinclude:: ../omnetpp.ini
-   :start-at: Config Distance4
+   :start-at: Config Distance
    :end-at: channelAccess
    :language: ini
 

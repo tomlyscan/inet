@@ -11,7 +11,7 @@ import inet.physicallayer.unitdisk.UnitDiskRadioMedium;
 import inet.visualizer.integrated.IntegratedMultiVisualizer;
 import inet.visualizer.integrated.IntegratedVisualizer;
 
-network AnalogModelShowcaseRoutingNetwork4
+network AnalogModelShowcaseRoutingNetwork
 {
     parameters:
         @display("bgb=400,400");
@@ -38,7 +38,7 @@ network AnalogModelShowcaseRoutingNetwork4
         }
 }
 
-network AnalogModelShowcaseDistanceNetwork4
+network AnalogModelShowcaseDistanceNetwork
 {
     parameters:
         @display("bgb=901.5187,376.65");
@@ -64,7 +64,7 @@ network AnalogModelShowcaseDistanceNetwork4
         }
 }
 
-network AnalogModelShowcaseDistanceNetwork5
+network AnalogModelShowcaseDistanceNetwork_
 {
     parameters:
         @display("bgb=901.5187,376.65");
@@ -90,7 +90,7 @@ network AnalogModelShowcaseDistanceNetwork5
         }
 }
 
-network AnalogModelShowcaseNoiseNetwork5
+network AnalogModelShowcaseNoiseNetwork
 {
     @display("bgb=400,400");
     submodules:
