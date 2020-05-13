@@ -29,7 +29,7 @@ void Ieee8022LlcInserter::initialize(int stage)
 {
     PacketFlowBase::initialize(stage);
     if (stage == INITSTAGE_LOCAL) {
-        registerService(Protocol::ieee8022, inputGate, nullptr);
+//        registerService(Protocol::ieee8022, inputGate, nullptr);
         registerProtocol(Protocol::ieee8022, outputGate, outputGate);
     }
 }
