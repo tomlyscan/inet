@@ -86,7 +86,7 @@ We'll demonstrate the unit disk analog model in an example scenario featuring mo
 
 In the simulation, ``source`` sends ping requests to ``destination``, and ``destination`` sends back ping replies. The source and the destination host are stationary, the other hosts move around the scene in random directions. The hosts use :ned:`Ieee80211UnitDiskRadio`, and the communication ranges are displayed as blue circles; the interference ranges are not displayed, but they are large enough so that all concurrent transmissions interfere. All hosts use the Ad hoc On-Demand Distance Vector Routing (AODV) protocol to maintain routes as the topology changes, so that they are able to relay the ping messages between the source and the destination hosts.
 
-Here is the configuration in omnetpp.ini:
+Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
 
 .. literalinclude:: ../omnetpp.ini
    :start-at: Config Routing4
@@ -126,7 +126,7 @@ In the example simulation, an :ned:`AdhocHost` sends UDP packets to another. The
   ha nem bitlevel, akkor a result az error modellben levo fuggveny (per vs snir)
   ha bitlevel, akkor bonyolultabb
 
-Here is the configuration in omnetpp.ini:
+Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>`:
 
 .. literalinclude:: ../omnetpp.ini
    :start-at: Config Distance4
@@ -250,7 +250,7 @@ The :ned:`NoiseSource` module creates dimensional transmissions, which interfere
 
 The noise transmissions don't have any data or modulation, just a center frequency, bandwidth, power, and configurable arbitrary signal shape in frequency and time. It also has duration and sleep interval parameters.
 
-Here is the configuration in omnetpp.ini pertaining to the radio settings:
+Here is the configuration in :download:`omnetpp.ini <../omnetpp.ini>` pertaining to the radio settings:
 
 .. literalinclude:: ../omnetpp.ini
    :start-after: radio settings
@@ -278,3 +278,10 @@ Here is a video of the simulation. Signals are visualized with colored rings, su
    hide physical and data link visualizers until around event 334
 
 Transmissions from one of the hosts and the noise source cause the other host to defer from transmitting. The noise transmissions often overlap the data frames, yet the short bursts are not enough to ruin their reception, most packets are successfully received. Note that the thin line of the noise on the spectrogram is much shorter than the data frame. Also, the spectrograms have a colored background due to the background noise (also displayed on the spectrum figures).
+
+Sources: :download:`omnetpp.ini <../omnetpp.ini>`, :download:`AnalogModelShowcase.ned <../AnalogModelShowcase.ned>`
+
+Discussion
+----------
+
+Use `this <https://github.com/inet-framework/inet-showcases/issues/TODO>`__ page in the GitHub issue tracker for commenting on this showcase.
